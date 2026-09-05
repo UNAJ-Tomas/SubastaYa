@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
-{
+namespace Domain.Entities;
+
     public class Usuario
     {
         public int id { get; set; }
@@ -20,4 +20,4 @@ namespace Application.Interfaces
         public ICollection<Subasta> Subastas { get; set; } = new List<Subasta>();
         public ICollection<Puja> Pujas { get; set; } = new List<Puja>();
     }
-}
+

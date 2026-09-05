@@ -8,7 +8,17 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <Folder Include="DTOs\" />
     <Folder Include="Interfaces\" />
+    <Folder Include="UseCases\Auditoria_log\" />
+    <Folder Include="UseCases\Categoria\" />
+    <Folder Include="UseCases\Billetera\" />
+    <Folder Include="UseCases\Subasta\Commands\" />
+    <Folder Include="UseCases\Subasta\Handlers\" />
+    <Folder Include="UseCases\Subasta\Queries\" />
+    <Folder Include="UseCases\Transaccion_leadger\" />
+    <Folder Include="UseCases\Usuario\" />
+    <Folder Include="UseCases\Puja\" />
   </ItemGroup>
 
   <ItemGroup>
