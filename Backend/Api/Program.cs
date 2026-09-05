@@ -1,3 +1,6 @@
+using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,6 +11,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<SubastaDbContext>();
+
+    try
+    {
+        //context.Database.EnsureDeleted();
+        //context.Database.EnsureCreated();
+        //context.Database.Migrate();
+        context.Database.EnsureDeleted();   
+        context.Database.EnsureCreated();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Error al crear la base de datos.");
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

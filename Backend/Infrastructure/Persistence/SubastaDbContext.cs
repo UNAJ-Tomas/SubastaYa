@@ -125,6 +125,8 @@ namespace Infrastructure.Persistence
             // Conversión de Enums a String
             modelBuilder.Entity<Subasta>().Property(s => s.estado).HasConversion<string>();
             modelBuilder.Entity<Transaccion_Ledger>().Property(t => t.tipo).HasConversion<string>();
+
+            modelBuilder.Seed();
         }
 
     }
