@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// REGISTRAR EL DBCONTEXT AQUÍ:
+builder.Services.AddDbContext<SubastaDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();

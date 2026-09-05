@@ -9,21 +9,25 @@
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="DTOs\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="UseCases\Auditoria_log\" />
-    <Folder Include="UseCases\Categoria\" />
     <Folder Include="UseCases\Billetera\" />
+    <Folder Include="UseCases\Categoria\Commands\" />
+    <Folder Include="UseCases\Categoria\Handlers\" />
+    <Folder Include="UseCases\Categoria\Queries\" />
+    <Folder Include="UseCases\Puja\Commands\" />
+    <Folder Include="UseCases\Puja\Handlers\" />
+    <Folder Include="UseCases\Puja\Queries\" />
     <Folder Include="UseCases\Subasta\Commands\" />
     <Folder Include="UseCases\Subasta\Handlers\" />
     <Folder Include="UseCases\Subasta\Queries\" />
     <Folder Include="UseCases\Transaccion_leadger\" />
-    <Folder Include="UseCases\Usuario\" />
-    <Folder Include="UseCases\Puja\" />
+    <Folder Include="UseCases\Usuario\Commands\" />
+    <Folder Include="UseCases\Usuario\Handlers\" />
+    <Folder Include="UseCases\Usuario\Queries\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

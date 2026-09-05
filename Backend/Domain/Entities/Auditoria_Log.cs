@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Domain.Entities;
+public class Auditoria_Log
 {
-    public class Auditoria_Log
-    {
         public int id { get; set; }
         public string entidad { get; set; }
         public int entidad_id { get; set; }
@@ -19,5 +18,4 @@ namespace Application.Interfaces
 
         // --- PROPIEDADES DE NAVEGACIÓN ---
         public Usuario? Usuario { get; set; }
-    }
 }
