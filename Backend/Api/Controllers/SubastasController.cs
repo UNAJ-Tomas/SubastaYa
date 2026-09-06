@@ -12,18 +12,27 @@ public class SubastasController : ControllerBase
 
     //atributos
     private readonly CrearSubastaCommandHandler _crearSubastaHandler;
+    private readonly ActualizarSubastaCommandHandler _actualizarSubastaHandler;
+    private readonly CancelarSubastaCommandHandler _cancelarSubastaHandler;
     private readonly ObtenerSubastaPorIdQueryHandler _obtenerSubastaPorIdHandler;
     private readonly ObtenerSubastasActivasQueryHandler _obtenerSubastasActivasHandler;
+    private readonly RegistrarPujaCommandHandler _registrarPujaCommandHandler;
 
     //constructor
     public SubastasController(
+    RegistrarPujaCommandHandler registrarPujaCommandHandler,
         CrearSubastaCommandHandler crearSubastaHandler,
+        ActualizarSubastaCommandHandler actualizarSubastaHandler,
+        CancelarSubastaCommandHandler cancelarSubastaHandler,
         ObtenerSubastaPorIdQueryHandler obtenerSubastaPorIdHandler,
         ObtenerSubastasActivasQueryHandler obtenerSubastasActivasHandler)
     {
         _crearSubastaHandler = crearSubastaHandler;
+        _actualizarSubastaHandler = actualizarSubastaHandler;
+        _cancelarSubastaHandler = cancelarSubastaHandler;
         _obtenerSubastaPorIdHandler = obtenerSubastaPorIdHandler;
         _obtenerSubastasActivasHandler = obtenerSubastasActivasHandler;
+        _registrarPujaCommandHandler = registrarPujaCommandHandler;
     }
 
 
@@ -53,5 +62,15 @@ public class SubastasController : ControllerBase
     {
         var subastas = await _obtenerSubastasActivasHandler.HandleAsync();
         return Ok(subastas);
+    }
+
+    [HttpPost("{id}/pujas")]
+    public async Task<IActionResult> RegistrarPuja(int id, RegistrarPujaCommand command)
+    {
+        if (id != command.SubastaId)
+            return BadRequest("El ID de la ruta no coincide con el cuerpo de la solicitud.");
+
+        var resultado = await _registrarPujaCommandHandler.Handle(command);
+        return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });
     }
 }

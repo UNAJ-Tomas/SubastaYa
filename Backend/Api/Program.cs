@@ -19,6 +19,9 @@ builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
+builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
+builder.Services.AddScoped<CancelarSubastaCommandHandler>();
+builder.Services.AddScoped<RegistrarPujaCommandHandler>();
 
 //-------------------------------------------------------------------------------------------------
 
