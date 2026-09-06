@@ -1,4 +1,7 @@
+using Application.Interfaces.Repositories;
+using Application.UseCases.Subasta.Handlers;
 using Infrastructure.Persistence;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<SubastaDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//-------------------------------------------------------------------------------------------------
+
+// Registrar DbContext y Repositorios
+builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
+
+// Registrar Handlers (Commands y Queries)
+builder.Services.AddScoped<CrearSubastaCommandHandler>();
+builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
+builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
+
+//-------------------------------------------------------------------------------------------------
 
 // Add services to the container.
 

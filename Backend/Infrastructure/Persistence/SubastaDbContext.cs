@@ -14,80 +14,16 @@ namespace Infrastructure.Persistence
 
         //tablas
 
-        DbSet<Auditoria_Log> Auditoria_log => Set<Auditoria_Log>();
-        DbSet<Billetera> Billetera => Set<Billetera>();
-        DbSet<Categoria> Categoria => Set<Categoria>();
-        DbSet<Puja> Puja => Set<Puja>();
-        DbSet<Subasta> Subasta => Set<Subasta>();
-        DbSet<Transaccion_Ledger> Transaccion_Ledgers => Set<Transaccion_Ledger>();
-        DbSet<Usuario> Usuario => Set<Usuario>();
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<Auditoria_Log> Auditoria_log => Set<Auditoria_Log>();
+        public DbSet<Billetera> Billetera => Set<Billetera>();
+        public DbSet<Categoria> Categoria => Set<Categoria>();
+        public DbSet<Puja> Puja => Set<Puja>();
+        public DbSet<Subasta> Subasta => Set<Subasta>();
+        public DbSet<Transaccion_Ledger> Transaccion_Ledgers => Set<Transaccion_Ledger>();
+        public DbSet<Usuario> Usuario => Set<Usuario>();
+         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // 1. Relación 1:1 obligatoria (EF necesita saber qué tabla lleva la FK)
-            modelBuilder.Entity<Usuario>()
-                .HasOne(u => u.Billetera)
-                .WithOne(b => b.Usuario)
-                .HasForeignKey<Billetera>(b => b.usuario_id);
-
-            // 2. Subasta (Evita eliminaciones en cascada ambiguas + Concurrencia + Decimales)
-            modelBuilder.Entity<Subasta>(entity =>
-            {
-                entity.HasOne(s => s.Vendedor)
-                    .WithMany()
-                    .HasForeignKey(s => s.vendedor_id)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.Property(s => s.version).IsRowVersion();
-                entity.Property(s => s.precio_base).HasPrecision(18, 2);
-                entity.Property(s => s.incremento_minimo).HasPrecision(18, 2);
-            });
-
-            // 3. Puja (Evita borrado en cascada del comprador + Decimal)
-            modelBuilder.Entity<Puja>(entity =>
-            {
-                entity.HasOne(p => p.Comprador)
-                    .WithMany()
-                    .HasForeignKey(p => p.comprador_id)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                entity.Property(p => p.monto).HasPrecision(18, 2);
-            });
-
-            // 4. Transaccion_Ledger (Subasta es opcional según diagrama + Decimal)
-            modelBuilder.Entity<Transaccion_Ledger>(entity =>
-            {
-                entity.HasOne(t => t.Subasta)
-                    .WithMany()
-                    .HasForeignKey(t => t.subasta_id)
-                    .IsRequired(false);
-
-                entity.Property(t => t.monto).HasPrecision(18, 2);
-            });
-
-            // 5. Auditoria_Log (Usuario es opcional cuando la acción la ejecuta el Worker)
-            modelBuilder.Entity<Auditoria_Log>(entity =>
-            {
-                entity.HasOne(a => a.Usuario)
-                    .WithMany()
-                    .HasForeignKey(a => a.usuario_id)
-                    .IsRequired(false);
-            });
-
-            // 6. Billetera (Concurrencia + Decimales)
-            modelBuilder.Entity<Billetera>(entity =>
-            {
-                entity.Property(b => b.version).IsRowVersion();
-                entity.Property(b => b.saldo_total).HasPrecision(18, 2);
-                entity.Property(b => b.saldo_retenido).HasPrecision(18, 2);
-                entity.Property(b => b.saldo_disponible).HasPrecision(18, 2);
-            });
-
-
-
-
 
             // 1. Relación 1:1 Usuario - Billetera (EF necesita saber qué tabla lleva la FK)
             modelBuilder.Entity<Usuario>()

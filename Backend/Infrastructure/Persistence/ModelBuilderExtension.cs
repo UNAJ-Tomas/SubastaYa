@@ -14,10 +14,10 @@ namespace Infrastructure.Persistence
         public static void Seed(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Categoria>().HasData(
-                new Categoria { id = 1, nombre = "Tecnología", url_icono = null, },
-                new Categoria { id = 2, nombre = "Coleccionables", url_icono = null, },
-                new Categoria { id = 3, nombre = "Indumentaria", url_icono = null, },
-                new Categoria { id = 4, nombre = "Vehículos", url_icono = null, }
+                new Categoria { id = 1, nombre = "Tecnología", url_icono = "", },
+                new Categoria { id = 2, nombre = "Coleccionables", url_icono = "", },
+                new Categoria { id = 3, nombre = "Indumentaria", url_icono = "", },
+                new Categoria { id = 4, nombre = "Vehículos", url_icono = "", }
             );
             modelBuilder.Entity<Usuario>().HasData(
                 new Usuario { id = 1, nombre = "Creador de publicaciones", email = "vendedor@test.com", },
@@ -37,11 +37,11 @@ namespace Infrastructure.Persistence
             );
 
             modelBuilder.Entity<Subasta>().HasData(
-                new Subasta { id = 1, vendedor_id = 1, categoria_id = 1, titulo = "Celular", descripcion = "Celular Samsung", url_imagen = null, precio_base = 30000, incremento_minimo = 1000, fecha_inicio = DateTime.Now, fecha_fin = DateTime.Now.AddMinutes(30), estado = (EstadoSubasta)2, version = 0 },
-                new Subasta { id = 2, vendedor_id = 1, categoria_id = 2, titulo = "Figura de acción", descripcion = "Figura de acción de colección", url_imagen = null, precio_base = 5000, incremento_minimo = 500, fecha_inicio = DateTime.Now, fecha_fin = DateTime.Now.AddMinutes(1), estado = (EstadoSubasta)2, version = 0 },
-                new Subasta { id = 3, vendedor_id = 1, categoria_id = 3, titulo = "Camiseta", descripcion = "Camiseta de algodón", url_imagen = null, precio_base = 2000, incremento_minimo = 1000, fecha_inicio = DateTime.Now.AddHours(24), fecha_fin = DateTime.Now.AddMinutes(1), estado = (EstadoSubasta)1, version = 0 },
-                new Subasta { id = 4, vendedor_id = 1, categoria_id = 4, titulo = "Bicicleta", descripcion = "Bicicleta de montaña", url_imagen = null, precio_base = 10000, incremento_minimo = 1000, fecha_inicio = DateTime.Now.AddDays(-7), fecha_fin = DateTime.Now.AddDays(-4), estado = (EstadoSubasta)2, version = 0 },
-                new Subasta { id = 5, vendedor_id = 1, categoria_id = 1, titulo = "Tablet", descripcion = "Tablet de última generación", url_imagen = null, precio_base = 25000, incremento_minimo = 1500, fecha_inicio = DateTime.Now.AddDays(-7), fecha_fin = DateTime.Now.AddDays(-1), estado = (EstadoSubasta)2, version = 0 }
+                new Subasta { id = 1, vendedor_id = 1, categoria_id = 1, titulo = "Celular", descripcion = "Celular Samsung", url_imagen = "", precio_base = 30000, incremento_minimo = 1000, fecha_inicio = DateTime.Now, fecha_fin = DateTime.Now.AddMinutes(30), estado = (EstadoSubasta)2 },
+                new Subasta { id = 2, vendedor_id = 1, categoria_id = 2, titulo = "Figura de acción", descripcion = "Figura de acción de colección", url_imagen = "", precio_base = 5000, incremento_minimo = 500, fecha_inicio = DateTime.Now, fecha_fin = DateTime.Now.AddMinutes(1), estado = (EstadoSubasta)2},
+                new Subasta { id = 3, vendedor_id = 1, categoria_id = 3, titulo = "Camiseta", descripcion = "Camiseta de algodón", url_imagen = "", precio_base = 2000, incremento_minimo = 1000, fecha_inicio = DateTime.Now.AddHours(24), fecha_fin = DateTime.Now.AddMinutes(1), estado = (EstadoSubasta)1 },
+                new Subasta { id = 4, vendedor_id = 1, categoria_id = 4, titulo = "Bicicleta", descripcion = "Bicicleta de montaña", url_imagen = "", precio_base = 10000, incremento_minimo = 1000, fecha_inicio = DateTime.Now.AddDays(-7), fecha_fin = DateTime.Now.AddDays(-4), estado = (EstadoSubasta)2 },
+                new Subasta { id = 5, vendedor_id = 1, categoria_id = 1, titulo = "Tablet", descripcion = "Tablet de última generación", url_imagen = "", precio_base = 25000, incremento_minimo = 1500, fecha_inicio = DateTime.Now.AddDays(-7), fecha_fin = DateTime.Now.AddDays(-1), estado = (EstadoSubasta)2 }
             );
             modelBuilder.Entity<Transaccion_Ledger>().HasData(
                 new Transaccion_Ledger { id = 1, billetera_id = 2, tipo = "DEPOSITO", monto = 150000, fecha = DateTime.Now.AddDays(-10), subasta_id = 0 },

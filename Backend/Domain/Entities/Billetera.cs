@@ -16,11 +16,12 @@ namespace Domain.Entities;
         public decimal saldo_total { get; set; }
         public decimal saldo_retenido { get; set; }
         public decimal saldo_disponible { get; set; }
-        public int version { get; set; }
+        public byte[] version { get; set; } = Array.Empty<byte>();
 
 
-        // --- PROPIEDADES DE NAVEGACIÓN ---
-        public Usuario Usuario { get; set; }
+
+    // --- PROPIEDADES DE NAVEGACIÓN ---
+    public Usuario Usuario { get; set; }
         public ICollection<Transaccion_Ledger> Transacciones { get; set; } = new List<Transaccion_Ledger>();
     }
 

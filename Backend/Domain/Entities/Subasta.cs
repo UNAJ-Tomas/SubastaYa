@@ -25,7 +25,8 @@ public class Subasta
     public DateTime fecha_inicio { get; set; }
     public DateTime fecha_fin { get; set; }
     public EstadoSubasta estado { get; set; } = EstadoSubasta.ACTIVA;
-    public int version { get; set; }
+    public byte[] version { get; set; } = Array.Empty<byte>();
+
 
 
     // --- PROPIEDADES DE NAVEGACIÓN ---

@@ -12,5 +12,6 @@ namespace Application.Interfaces.Repositories
         Task AddAsync(Subasta subasta);
         Task<Subasta?> GetByIdAsync(int id);
         Task<IEnumerable<Subasta>> GetAllActivasAsync();
+        Task UpdateAsync(Subasta subasta);
     }
 }

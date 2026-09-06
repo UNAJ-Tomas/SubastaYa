@@ -1,12 +1,11 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿namespace Infrastructure.Repositories;
+
+using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Domain.Enums;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Application.Interfaces.Repositories;
-
-namespace Infrastructure.Repositories;
-
-
 
 public class SubastaRepository : ISubastaRepository
 {
@@ -25,11 +24,21 @@ public class SubastaRepository : ISubastaRepository
 
     public async Task<Subasta?> GetByIdAsync(int id)
     {
-        return await _context.Subasta.FirstOrDefaultAsync(s => s.id == id);
+        return await _context.Subasta
+            .Include(s => s.Pujas)
+            .FirstOrDefaultAsync(s => s.id == id);
     }
 
     public async Task<IEnumerable<Subasta>> GetAllActivasAsync()
     {
-        return await _context.Subasta.ToListAsync();
+        return await _context.Subasta
+            .Where(s => s.estado==EstadoSubasta.ACTIVA)
+            .ToListAsync();
+    }
+
+    public async Task UpdateAsync(Subasta subasta)
+    {
+        _context.Subasta.Update(subasta);
+        await _context.SaveChangesAsync();
     }
 }
