@@ -64,6 +64,24 @@ public class SubastasController : ControllerBase
         return Ok(subastas);
     }
 
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Actualizar(int id, ActualizarSubastaCommand command)
+    {
+        if (id != command.Id)
+            return BadRequest("El ID de la ruta no coincide con el cuerpo de la solicitud.");
+
+        var resultado = await _actualizarSubastaHandler.Handle(command);
+        return Ok(new { mensaje = "Subasta actualizada correctamente", exito = resultado });
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Cancelar(int id)
+    {
+        var command = new CancelarSubastaCommand(id);
+        var resultado = await _cancelarSubastaHandler.Handle(command);
+        return Ok(new { mensaje = "Subasta cancelada correctamente", exito = resultado });
+    }
+
     [HttpPost("{id}/pujas")]
     public async Task<IActionResult> RegistrarPuja(int id, RegistrarPujaCommand command)
     {

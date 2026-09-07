@@ -8,10 +8,14 @@ namespace Application.UseCases.Subasta.Handlers
     public class RegistrarPujaCommandHandler
     {
         private readonly ISubastaRepository _subastaRepository;
+        private readonly IBilleteraRepository _billeteraRepository;
 
-        public RegistrarPujaCommandHandler(ISubastaRepository subastaRepository)
+        public RegistrarPujaCommandHandler(
+            ISubastaRepository subastaRepository, 
+            IBilleteraRepository billeteraRepository)
         {
             _subastaRepository = subastaRepository;
+
         }
 
         public async Task<bool> Handle(RegistrarPujaCommand command, CancellationToken cancellationToken = default)

@@ -14,6 +14,7 @@ builder.Services.AddDbContext<SubastaDbContext>(options =>
 
 // Registrar DbContext y Repositorios
 builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
+builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();

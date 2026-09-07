@@ -7,19 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="DTOs\" />
     <Folder Include="UseCases\Auditoria_log\Commands\" />
     <Folder Include="UseCases\Auditoria_log\Handlers\" />
     <Folder Include="UseCases\Auditoria_log\Queries\" />
-    <Folder Include="UseCases\Billetera\Commands\" />
-    <Folder Include="UseCases\Billetera\Handlers\" />
-    <Folder Include="UseCases\Billetera\Queries\" />
     <Folder Include="UseCases\Categoria\Commands\" />
     <Folder Include="UseCases\Categoria\Handlers\" />
     <Folder Include="UseCases\Categoria\Queries\" />
-    <Folder Include="UseCases\Puja\Commands\" />
-    <Folder Include="UseCases\Puja\Handlers\" />
     <Folder Include="UseCases\Puja\Queries\" />
     <Folder Include="UseCases\Transaccion_leadger\Commands\" />
     <Folder Include="UseCases\Transaccion_leadger\Handlers\" />
