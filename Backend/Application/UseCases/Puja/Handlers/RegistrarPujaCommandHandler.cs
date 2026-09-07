@@ -40,7 +40,7 @@ namespace Application.UseCases.Subasta.Handlers
             if (command.Monto < montoMinimoRequerido)
                 throw new Exception($"El monto ofertado debe ser de al menos {montoMinimoRequerido}.");
 
-            // Instancia de Puja respetando los nombres exactos de tu entidad
+            
             var nuevaPuja = new Domain.Entities.Puja
             {
                 subasta_id = command.SubastaId,

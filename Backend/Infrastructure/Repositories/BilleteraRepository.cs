@@ -19,6 +19,11 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task AddAsync(Billetera billetera)
+        {
+            await _context.Billetera.AddAsync(billetera);
+        }
+
         public async Task<Billetera?> GetByUsuarioIdAsync(int usuarioId)
         {
             return await _context.Billetera.FirstOrDefaultAsync(b => b.id == usuarioId);
