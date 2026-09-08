@@ -1,4 +1,5 @@
 using Application.Interfaces.Repositories;
+using Application.UseCases.Categoria.Handlers;
 using Application.UseCases.Subasta.Handlers;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<SubastaDbContext>(options =>
 builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
 builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 
+builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
@@ -23,6 +26,10 @@ builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
 builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
 builder.Services.AddScoped<CancelarSubastaCommandHandler>();
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
+
+builder.Services.AddScoped<ObtenerCategoriaPorIdQueryHandler>();
+builder.Services.AddScoped<ObtenerCategoriaPorNombreQueryHandler>();
+builder.Services.AddScoped<ObtenerCategoriasQueryHandler>();
 
 //-------------------------------------------------------------------------------------------------
 
