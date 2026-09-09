@@ -14,7 +14,6 @@
     <Folder Include="UseCases\Categoria\Handlers\" />
     <Folder Include="UseCases\Categoria\Queries\" />
     <Folder Include="UseCases\Puja\Queries\" />
-    <Folder Include="UseCases\Transaccion_leadger\Commands\" />
     <Folder Include="UseCases\Transaccion_leadger\Handlers\" />
     <Folder Include="UseCases\Transaccion_leadger\Queries\" />
     <Folder Include="UseCases\Usuario\Commands\" />

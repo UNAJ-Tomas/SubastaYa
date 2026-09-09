@@ -2,6 +2,7 @@
 
 using Application.UseCases.Subasta.Commands;
 using Application.UseCases.Subasta.Handlers;
+using Application.Exceptions;
 using Application.UseCases.Subasta.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -86,7 +87,7 @@ public class SubastasController : ControllerBase
     public async Task<IActionResult> RegistrarPuja(int id, RegistrarPujaCommand command)
     {
         if (id != command.SubastaId)
-            return BadRequest("El ID de la ruta no coincide con el cuerpo de la solicitud.");
+            throw new ValidationException("El ID de la ruta no coincide con el ID de la subasta del cuerpo de la solicitud.");
 
         var resultado = await _registrarPujaCommandHandler.Handle(command);
         return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });

@@ -18,7 +18,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<int> CreateAsync(Usuario usuario)
+        public async Task<int> AddAsync(Usuario usuario)
         {
             _context.Usuario.AddAsync(usuario);
             await _context.SaveChangesAsync();

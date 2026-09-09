@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
+using Application.Exceptions; 
 using Application.UseCases.Billetera.Queries;
 
 namespace Application.UseCases.Billetera.Handlers
@@ -18,9 +19,10 @@ namespace Application.UseCases.Billetera.Handlers
             var billetera = await _billeteraRepository.GetByUsuarioIdAsync(query.UsuarioId);
 
             if (billetera == null)
-                throw new Exception("No se encontró la billetera del usuario.");
+                throw new NotFoundException($"No se encontró la billetera para el usuario con ID {query.UsuarioId}.");
 
             return new BilleteraDto(
+                billetera.id,
                 billetera.usuario_id,
                 billetera.saldo_disponible,
                 billetera.saldo_retenido,

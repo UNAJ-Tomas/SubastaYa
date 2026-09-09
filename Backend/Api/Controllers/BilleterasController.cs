@@ -11,13 +11,16 @@ public class BilleterasController : ControllerBase
 {
     private readonly CargarSaldoCommandHandler _cargarSaldoHandler;
     private readonly ObtenerSaldoPorUsuarioQueryHandler _obtenerSaldoPorUsuarioHandler;
+    private readonly ObtenerHistorialTransaccionesQueryHandler _obtenerHistorialQueryHandler;
 
     public BilleterasController(
         CargarSaldoCommandHandler cargarSaldoHandler,
-        ObtenerSaldoPorUsuarioQueryHandler obtenerSaldoPorUsuarioHandler)
+        ObtenerSaldoPorUsuarioQueryHandler obtenerSaldoPorUsuarioHandler,
+        ObtenerHistorialTransaccionesQueryHandler obtenerHistorialQueryHandler)
     {
         _cargarSaldoHandler = cargarSaldoHandler;
         _obtenerSaldoPorUsuarioHandler = obtenerSaldoPorUsuarioHandler;
+        _obtenerHistorialQueryHandler = obtenerHistorialQueryHandler;
     }
 
     [HttpGet("usuario/{usuarioId}")]
@@ -34,5 +37,12 @@ public class BilleterasController : ControllerBase
     {
         var resultado = await _cargarSaldoHandler.HandleAsync(command);
         return Ok(new { mensaje = "Saldo cargado exitosamente", exito = resultado });
+    }
+
+    [HttpGet("usuario/{usuarioId}/movimientos")]
+    public async Task<IActionResult> ObtenerMovimientos(int usuarioId)
+    {
+        var resultado = await _obtenerHistorialQueryHandler.HandleAsync(usuarioId);
+        return Ok(resultado);
     }
 }

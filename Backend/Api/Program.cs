@@ -1,6 +1,9 @@
 using Application.Interfaces.Repositories;
+using Application.UseCases.Billetera.Handlers;
 using Application.UseCases.Categoria.Handlers;
 using Application.UseCases.Subasta.Handlers;
+using Application.UseCases.Usuario.Handlers;
+using Domain.Entities;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +19,9 @@ builder.Services.AddDbContext<SubastaDbContext>(options =>
 // Registrar DbContext y Repositorios
 builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
 builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
-
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerRepository>();
 
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
@@ -25,11 +29,21 @@ builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
 builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
 builder.Services.AddScoped<CancelarSubastaCommandHandler>();
+builder.Services.AddScoped<FinalizarSubastaCommandHandler>();
+
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
+
+builder.Services.AddScoped<CargarSaldoCommandHandler>();
+builder.Services.AddScoped<ObtenerHistorialTransaccionesQueryHandler>();
+builder.Services.AddScoped<ObtenerSaldoPorUsuarioQueryHandler>();
 
 builder.Services.AddScoped<ObtenerCategoriaPorIdQueryHandler>();
 builder.Services.AddScoped<ObtenerCategoriaPorNombreQueryHandler>();
 builder.Services.AddScoped<ObtenerCategoriasQueryHandler>();
+
+builder.Services.AddScoped<RegistrarUsuarioCommandHandler>();
+
+
 
 //-------------------------------------------------------------------------------------------------
 
@@ -41,6 +55,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseMiddleware<Api.Middlewares.ExceptionMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {

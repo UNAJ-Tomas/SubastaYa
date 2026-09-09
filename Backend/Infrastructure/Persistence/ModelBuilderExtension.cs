@@ -26,7 +26,7 @@ namespace Infrastructure.Persistence
                 new Usuario { id = 4, nombre = "Sin saldo", email = "sinfondos@test.com", }
             );
             modelBuilder.Entity<Billetera>().HasData(
-                new Billetera { id = 1, usuario_id = 1, saldo_total = 0, saldo_retenido = 0, saldo_disponible = 0 },
+                new Billetera { id = 1, usuario_id = 1, saldo_total = 100000, saldo_retenido = 0, saldo_disponible = 0 },
                 new Billetera { id = 2, usuario_id = 2, saldo_total = 150000, saldo_retenido = 45000, saldo_disponible = 105000 },
                 new Billetera { id = 3, usuario_id = 3, saldo_total = 200000, saldo_retenido = 0, saldo_disponible = 200000 },
                 new Billetera { id = 4, usuario_id = 4, saldo_total = 500, saldo_retenido = 0, saldo_disponible = 0 }
@@ -44,10 +44,10 @@ namespace Infrastructure.Persistence
                 new Subasta { id = 5, vendedor_id = 1, categoria_id = 1, titulo = "Tablet", descripcion = "Tablet de última generación", url_imagen = "", precio_base = 25000, incremento_minimo = 1500, fecha_inicio = DateTime.Now.AddDays(-7), fecha_fin = DateTime.Now.AddDays(-1), estado = (EstadoSubasta)2 }
             );
             modelBuilder.Entity<Transaccion_Ledger>().HasData(
-                new Transaccion_Ledger { id = 1, billetera_id = 2, tipo = "DEPOSITO", monto = 150000, fecha = DateTime.Now.AddDays(-10), subasta_id = 0 },
-                new Transaccion_Ledger { id = 2, billetera_id = 3, tipo = "DEPOSITO", monto = 200000, fecha = DateTime.Now.AddDays(-10), subasta_id = 0 },
-                new Transaccion_Ledger { id = 3, billetera_id = 4, tipo = "DEPOSITO", monto = 500, fecha = DateTime.Now.AddDays(-10), subasta_id = 0 },
-                new Transaccion_Ledger { id = 4, billetera_id = 2, tipo = "RETENCION", monto = 45000, fecha = DateTime.Now.AddMinutes(10), subasta_id = 1 }
+                new Transaccion_Ledger { id = 1, billetera_id = 1, tipo = "DEPOSITO", monto = 150000, fecha = DateTime.Now.AddDays(-10), subasta_id = null },
+                new Transaccion_Ledger { id = 2, billetera_id = 2, tipo = "DEPOSITO", monto = 200000, fecha = DateTime.Now.AddDays(-10), subasta_id = null },
+                new Transaccion_Ledger { id = 3, billetera_id = 3, tipo = "DEPOSITO", monto = 500, fecha = DateTime.Now.AddDays(-10), subasta_id = null },
+                new Transaccion_Ledger { id = 4, billetera_id = 4, tipo = "RETENCION", monto = 45000, fecha = DateTime.Now.AddMinutes(10), subasta_id = 1 }
             );
         }
     }

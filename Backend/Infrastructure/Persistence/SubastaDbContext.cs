@@ -56,6 +56,21 @@ namespace Infrastructure.Persistence
                 s.Property(p => p.incremento_minimo).HasPrecision(18, 2);
             });
 
+            modelBuilder.Entity<Transaccion_Ledger>(t =>
+            {
+                t.Property(p => p.monto).HasPrecision(18, 2);
+
+                // Forzar el nombre exacto de la clave foránea a billetera_id
+                t.HasOne(x => x.Billetera)
+                 .WithMany()
+                 .HasForeignKey(x => x.billetera_id);
+
+                // Indicar que la relación con Subasta es opcional
+                t.HasOne(x => x.Subasta)
+                 .WithMany()
+                 .HasForeignKey(x => x.subasta_id)
+                 .IsRequired(false);
+            });
 
             // Conversión de Enums a String
             modelBuilder.Entity<Subasta>().Property(s => s.estado).HasConversion<string>();

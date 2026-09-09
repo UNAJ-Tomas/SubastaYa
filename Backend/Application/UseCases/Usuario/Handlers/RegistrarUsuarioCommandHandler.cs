@@ -22,6 +22,7 @@ namespace Application.UseCases.Usuario.Handlers
             _billeteraRepository = billeteraRepository;
         }
 
+        //registramos al usuario
         public async Task<UsuarioDto> HandleAsync(RegistrarUsuarioCommand command)
         {
             if (string.IsNullOrWhiteSpace(command.Email) || string.IsNullOrWhiteSpace(command.Password))
@@ -39,7 +40,7 @@ namespace Application.UseCases.Usuario.Handlers
                 password_hash = command.Password // ( acá aplico hashing si corresponde)
             };
 
-            var usuarioId = await _usuarioRepository.CreateAsync(usuario);
+            var usuarioId = await _usuarioRepository.AddAsync(usuario);
 
             // 2. Crear automáticamente su Billetera asociada con saldo 0
             var billetera = new Domain.Entities.Billetera
@@ -51,6 +52,7 @@ namespace Application.UseCases.Usuario.Handlers
             };
 
             await _billeteraRepository.AddAsync(billetera);
+            return new UsuarioDto(usuarioId, usuario.nombre, usuario.email);
         }
     }
 }

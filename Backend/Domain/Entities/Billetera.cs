@@ -20,8 +20,8 @@ namespace Domain.Entities;
 
 
 
-    // --- PROPIEDADES DE NAVEGACIÓN ---
-    public Usuario Usuario { get; set; }
+        // --- PROPIEDADES DE NAVEGACIÓN ---
+        public Usuario Usuario { get; set; }
         public ICollection<Transaccion_Ledger> Transacciones { get; set; } = new List<Transaccion_Ledger>();
     }
 

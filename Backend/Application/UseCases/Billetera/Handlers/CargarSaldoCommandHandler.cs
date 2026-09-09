@@ -6,6 +6,7 @@ namespace Application.UseCases.Billetera.Handlers
     public class CargarSaldoCommandHandler
     {
         private readonly IBilleteraRepository _billeteraRepository;
+        private readonly ITransaccionLedgerRepository _ledgerRepository;
 
         public CargarSaldoCommandHandler(IBilleteraRepository billeteraRepository)
         {

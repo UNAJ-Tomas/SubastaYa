@@ -12,7 +12,7 @@ namespace Domain.Entities
         
         //FK
         public int billetera_id { get; set; }
-        public int subasta_id { get; set; }
+        public int? subasta_id { get; set; }
 
         public string tipo { get; set; }
         public decimal monto { get; set; }
@@ -20,6 +20,6 @@ namespace Domain.Entities
 
         // --- PROPIEDADES DE NAVEGACIÓN ---
         public Subasta? Subasta { get; set; }
-        public Billetera? Billetera { get; set; }
+        public Billetera Billetera { get; set; }
     }
 }
