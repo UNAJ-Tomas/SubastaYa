@@ -1,12 +1,15 @@
+using System.Text;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Billetera.Handlers;
 using Application.UseCases.Categoria.Handlers;
 using Application.UseCases.Subasta.Handlers;
 using Application.UseCases.Usuario.Handlers;
-using Domain.Entities;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,9 @@ builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
 builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
 builder.Services.AddScoped<CancelarSubastaCommandHandler>();
 builder.Services.AddScoped<FinalizarSubastaCommandHandler>();
+builder.Services.AddScoped<ObtenerSubastasConFiltroQueryHandler>();
+builder.Services.AddScoped<ObtenerSubastasPorVendedorQueryHandler>();
+builder.Services.AddScoped<ObtenerSubastasPorCompradorQueryHandler>();
 
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
 
@@ -43,7 +49,61 @@ builder.Services.AddScoped<ObtenerCategoriasQueryHandler>();
 
 builder.Services.AddScoped<RegistrarUsuarioCommandHandler>();
 
+// Registro del Background Worker para cierre automático
+builder.Services.AddHostedService<Infrastructure.Workers.SubastaWorker>();
 
+// 4. Autenticación JWT
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
+    };
+});
+
+// 5. Configuración de Swagger para probar los Tokens
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SubastaYa API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Ingresá el token JWT con el formato: Bearer {tu_token}",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 //-------------------------------------------------------------------------------------------------
 

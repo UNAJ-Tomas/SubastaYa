@@ -8,9 +8,12 @@ namespace Application.UseCases.Billetera.Handlers
         private readonly IBilleteraRepository _billeteraRepository;
         private readonly ITransaccionLedgerRepository _ledgerRepository;
 
-        public CargarSaldoCommandHandler(IBilleteraRepository billeteraRepository)
+        public CargarSaldoCommandHandler(
+            IBilleteraRepository billeteraRepository, 
+            ITransaccionLedgerRepository ledgerRepository)
         {
             _billeteraRepository = billeteraRepository;
+            _ledgerRepository = ledgerRepository;
         }
 
         public async Task<bool> HandleAsync(CargarSaldoCommand command, CancellationToken cancellationToken = default)
