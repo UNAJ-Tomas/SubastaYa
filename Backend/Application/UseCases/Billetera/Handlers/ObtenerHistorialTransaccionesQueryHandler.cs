@@ -1,4 +1,5 @@
 ﻿using Application.Exceptions;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
 

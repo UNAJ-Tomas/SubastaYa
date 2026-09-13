@@ -4,16 +4,18 @@ using Application.UseCases.Billetera.Handlers;
 using Application.UseCases.Categoria.Handlers;
 using Application.UseCases.Subasta.Handlers;
 using Application.UseCases.Usuario.Handlers;
+using Application.UseCases.Puja.Handlers;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// REGISTRAR EL DBCONTEXT AQUÍ:
+// REGISTRAR EL DBCONTEXT
 builder.Services.AddDbContext<SubastaDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -109,11 +111,23 @@ builder.Services.AddSwaggerGen(c =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PermitirFrontend", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 var app = builder.Build();
 app.UseMiddleware<Api.Middlewares.ExceptionMiddleware>();
 
@@ -144,10 +158,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//la comento para que no intente forzar https
+//app.UseHttpsRedirection();
+
+app.UseCors("PermitirFrontend");
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();

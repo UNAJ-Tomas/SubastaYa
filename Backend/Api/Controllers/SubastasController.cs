@@ -1,8 +1,8 @@
 ﻿namespace Api.Controllers;
-
+using Application.Exceptions;
 using Application.UseCases.Subasta.Commands;
 using Application.UseCases.Subasta.Handlers;
-using Application.Exceptions;
+using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Queries;
 using Microsoft.AspNetCore.Mvc;
 
@@ -66,7 +66,7 @@ public class SubastasController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Actualizar(int id, ActualizarSubastaCommand command)
+    public async Task<IActionResult> Actualizar(int id, ActualizarSubastaCommand command, CancellationToken cancellationToken)
     {
         if (id != command.Id)
             return BadRequest("El ID de la ruta no coincide con el cuerpo de la solicitud.");
@@ -76,7 +76,7 @@ public class SubastasController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> Cancelar(int id)
+    public async Task<IActionResult> Cancelar(int id, CancellationToken cancellationToken)
     {
         var command = new CancelarSubastaCommand(id);
         var resultado = await _cancelarSubastaHandler.Handle(command);
@@ -84,10 +84,10 @@ public class SubastasController : ControllerBase
     }
 
     [HttpPost("{id}/pujas")]
-    public async Task<IActionResult> RegistrarPuja(int id, RegistrarPujaCommand command)
+    public async Task<IActionResult> RegistrarPuja(int id, RegistrarPujaCommand command, CancellationToken cancellationToken)
     {
         if (id != command.SubastaId)
-            throw new ValidationException("El ID de la ruta no coincide con el ID de la subasta del cuerpo de la solicitud.");
+            return BadRequest(new { mensaje = "El ID de la ruta no coincide con el ID de la subasta del cuerpo de la solicitud." });
 
         var resultado = await _registrarPujaCommandHandler.Handle(command);
         return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });

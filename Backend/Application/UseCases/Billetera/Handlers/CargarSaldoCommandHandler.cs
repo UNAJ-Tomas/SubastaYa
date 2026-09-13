@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
+using Application.Interfaces.Repositories;
 using Application.UseCases.Billetera.Commands;
 
 namespace Application.UseCases.Billetera.Handlers
@@ -9,7 +10,7 @@ namespace Application.UseCases.Billetera.Handlers
         private readonly ITransaccionLedgerRepository _ledgerRepository;
 
         public CargarSaldoCommandHandler(
-            IBilleteraRepository billeteraRepository, 
+            IBilleteraRepository billeteraRepository,
             ITransaccionLedgerRepository ledgerRepository)
         {
             _billeteraRepository = billeteraRepository;
@@ -24,11 +25,22 @@ namespace Application.UseCases.Billetera.Handlers
             var billetera = await _billeteraRepository.GetByUsuarioIdAsync(command.UsuarioId);
 
             if (billetera == null)
-                throw new Exception("No se encontró la billetera del usuario.");
+            {
+                billetera = new Domain.Entities.Billetera
+                {
+                    usuario_id = command.UsuarioId,
+                    saldo_disponible = command.Monto
+                };
 
-            billetera.saldo_disponible += command.Monto;
+                await _billeteraRepository.AddAsync(billetera);
+            }
+            else
+            {
+                billetera.saldo_disponible += command.Monto;
 
-            await _billeteraRepository.UpdateAsync(billetera);
+                await _billeteraRepository.UpdateAsync(billetera);
+            }
+
             return true;
         }
     }

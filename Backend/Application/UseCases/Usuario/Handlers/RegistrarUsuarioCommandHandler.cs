@@ -23,7 +23,7 @@ namespace Application.UseCases.Usuario.Handlers
         }
 
         //registramos al usuario
-        public async Task<UsuarioDto> HandleAsync(RegistrarUsuarioCommand command)
+        public async Task<UsuarioDto> HandleAsync(RegistrarUsuarioCommand command, CancellationToken cancellation)
         {
             if (string.IsNullOrWhiteSpace(command.Email) || string.IsNullOrWhiteSpace(command.Password))
                 throw new Exception("El email y la contraseña son obligatorios.");

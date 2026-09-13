@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Domain.Entities;
+using Application.Interfaces;
 using Domain.Enums;
 
 namespace Application.UseCases.Subasta.Handlers

@@ -1,4 +1,4 @@
-﻿using Application.Interfaces.Repositories;
+﻿using Application.Interfaces;
 using Application.UseCases.Subasta.Queries;
 
 namespace Application.UseCases.Subasta.Handlers

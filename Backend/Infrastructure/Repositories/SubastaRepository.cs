@@ -41,4 +41,10 @@ public class SubastaRepository : ISubastaRepository
         _context.Subasta.Update(subasta);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<ITransaccion> IniciarTransaccionAsync(CancellationToken cancellationToken = default)
+    {
+        var efTransaction = await _context.Database.BeginTransactionAsync(cancellationToken);
+        return new EfTransaccion(efTransaction);
+    }
 }
