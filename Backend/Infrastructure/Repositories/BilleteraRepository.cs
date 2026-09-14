@@ -22,16 +22,16 @@ namespace Infrastructure.Repositories
         public async Task AddAsync(Billetera billetera)
         {
             await _context.Billetera.AddAsync(billetera);
+            await _context.SaveChangesAsync(); 
         }
 
         public async Task<Billetera?> GetByUsuarioIdAsync(int usuarioId)
         {
-            return await _context.Billetera.FirstOrDefaultAsync(b => b.id == usuarioId);
+            return await _context.Billetera.FirstOrDefaultAsync(b => b.usuario_id == usuarioId);
         }
 
         public async Task UpdateAsync(Billetera billetera)
         {
-            _context.Billetera.Update(billetera);
             await _context.SaveChangesAsync();
         }
     }

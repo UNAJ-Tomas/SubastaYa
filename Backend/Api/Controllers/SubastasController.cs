@@ -1,10 +1,11 @@
 ﻿namespace Api.Controllers;
 using Application.Exceptions;
+using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Commands;
 using Application.UseCases.Subasta.Handlers;
-using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Queries;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,12 +17,14 @@ public class SubastasController : ControllerBase
     private readonly ActualizarSubastaCommandHandler _actualizarSubastaHandler;
     private readonly CancelarSubastaCommandHandler _cancelarSubastaHandler;
     private readonly ObtenerSubastaPorIdQueryHandler _obtenerSubastaPorIdHandler;
+    private readonly ObtenerSubastasPorCompradorQueryHandler _obtenerSubastaPorCompradorQueryHandler;
     private readonly ObtenerSubastasActivasQueryHandler _obtenerSubastasActivasHandler;
     private readonly RegistrarPujaCommandHandler _registrarPujaCommandHandler;
 
     //constructor
     public SubastasController(
-    RegistrarPujaCommandHandler registrarPujaCommandHandler,
+    RegistrarPujaCommandHandler registrarPujaCommandHandler, 
+    ObtenerSubastasPorCompradorQueryHandler obtenerSubastaPorCompradorQueryHandler,
         CrearSubastaCommandHandler crearSubastaHandler,
         ActualizarSubastaCommandHandler actualizarSubastaHandler,
         CancelarSubastaCommandHandler cancelarSubastaHandler,
@@ -34,6 +37,7 @@ public class SubastasController : ControllerBase
         _obtenerSubastaPorIdHandler = obtenerSubastaPorIdHandler;
         _obtenerSubastasActivasHandler = obtenerSubastasActivasHandler;
         _registrarPujaCommandHandler = registrarPujaCommandHandler;
+        _obtenerSubastaPorCompradorQueryHandler = obtenerSubastaPorCompradorQueryHandler;
     }
 
 
@@ -91,5 +95,13 @@ public class SubastasController : ControllerBase
 
         var resultado = await _registrarPujaCommandHandler.Handle(command);
         return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });
+    }
+
+    [HttpGet("usuario/{usuarioId}/participadas")]
+    public async Task<IActionResult> GetSubastasPSarticipadas(int usuarioId)
+    {
+        var query = new ObtenerSubastasPorCompradorQuery(usuarioId);
+        var subastas = await _obtenerSubastaPorCompradorQueryHandler.Handle(query);
+        return Ok(subastas);
     }
 }

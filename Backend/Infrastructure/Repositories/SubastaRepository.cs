@@ -31,8 +31,11 @@ public class SubastaRepository : ISubastaRepository
 
     public async Task<IEnumerable<Subasta>> GetAllActivasAsync()
     {
+        var fechaActual = DateTime.Now;
+
         return await _context.Subasta
-            .Where(s => s.estado==EstadoSubasta.ACTIVA)
+            .Include(s => s.Pujas) // <-- Trae las pujas asociadas
+            .Where(s => s.estado == EstadoSubasta.ACTIVA && s.fecha_fin > fechaActual) // <-- Filtra por estado y por fecha vigente
             .ToListAsync();
     }
 
