@@ -27,6 +27,7 @@ builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerRepository>();
+builder.Services.AddScoped<IAuditoria_LogRepository, Auditoria_LogRepository>();
 
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
