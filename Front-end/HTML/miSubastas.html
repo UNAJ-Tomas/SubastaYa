@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubastaYa - Mis Subastas</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 mb-5 py-3" style="background-color: #0d3b2e; border-bottom: 3px solid #198754;">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold fs-4 text-white text-decoration-none" href="home.html">
+                SubastaYa <span class="text-warning">🔨</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <a href="home.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold">
+                    <i class="bi bi-house"></i> Inicio
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow-1">
+        <div class="container py-5">
+            <div class="mb-4">
+                <h2 class="fw-bold text-dark mb-2">
+                    <i class="bi bi-hammer text-success me-2"></i> Mis Subastas Participadas
+                </h2>
+                <p class="text-secondary">
+                    Aquí puedes ver el seguimiento de las subastas en las que realizaste ofertas.
+                </p>
+            </div>
+
+            <!-- Contenedor crucial para que la vista pinte las tarjetas -->
+            <div class="row g-4" id="contenedorSubastas">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="text-secondary mt-2">Cargando tus subastas...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript del controlador -->
+    <script type="module" src="../js/controller.js"></script>
+</body>
+
+</html>

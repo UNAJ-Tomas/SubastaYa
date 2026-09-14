@@ -1,0 +1,26 @@
+body {
+    background-color: #070d0a !important;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.card {
+    background-color: #0b1410 !important;
+    border-color: rgba(25, 135, 84, 0.25) !important;
+}
+
+.btn-outline-success {
+    color: #198754;
+    border-color: #198754;
+}
+
+.btn-outline-success:hover {
+    background-color: #198754;
+    color: #fff;
+}
+
+.form-control:focus {
+    background-color: #070d0a;
+    color: #fff;
+    border-color: #198754;
+    box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.25);
+}
