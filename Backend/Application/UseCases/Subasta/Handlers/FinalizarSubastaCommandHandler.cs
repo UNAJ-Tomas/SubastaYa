@@ -1,6 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.UseCases.Auditoria_log.Commands;
+using Application.UseCases.Auditoria_log.Handlers;
 using Domain.Entities;
 using Domain.Enums;
 
@@ -11,17 +13,19 @@ namespace Application.UseCases.Subasta.Handlers
         private readonly ISubastaRepository _subastaRepository;
         private readonly IBilleteraRepository _billeteraRepository;
         private readonly ITransaccionLedgerRepository _ledgerRepository;
+        private readonly CrearAuditoria_LogCommandHandler _crearauditoriaCommandHandler;
 
         public FinalizarSubastaCommandHandler(
             ISubastaRepository subastaRepository,
             IBilleteraRepository billeteraRepository,
-            ITransaccionLedgerRepository ledgerRepository)
+            ITransaccionLedgerRepository ledgerRepository,
+            CrearAuditoria_LogCommandHandler crearauditoriaCommandHandler)
         {
             _subastaRepository = subastaRepository;
             _billeteraRepository = billeteraRepository;
             _ledgerRepository = ledgerRepository;
+            _crearauditoriaCommandHandler = crearauditoriaCommandHandler;
         }
-
         public async Task<bool> HandleAsync(int subastaId)
         {
             //obtenemos el id de la subasta
@@ -80,6 +84,14 @@ namespace Application.UseCases.Subasta.Handlers
             {
                 subasta.estado = EstadoSubasta.DESIERTA;
             }
+            CrearAuditoria_LogCommand command = new CrearAuditoria_LogCommand
+            {
+                Entidad = "Subasta",
+                Entidad_id = subastaId,
+                Accion = "CIERRE_WORKER",
+                Usuario_id = null,
+            };
+            await _crearauditoriaCommandHandler.HandleAsync(command, subasta.estado.ToString());
 
             await _subastaRepository.UpdateAsync(subasta);
             return true;

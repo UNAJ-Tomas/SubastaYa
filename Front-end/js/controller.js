@@ -98,8 +98,23 @@ async function manejarIntentoPuja(subastaId, montoMinimoRequerido) {
     const montoStr = prompt(`Ingrese el monto de su oferta (Mínimo requerido: $${montoMinimoRequerido}):`, montoMinimoRequerido);
 
     if (!montoStr) return;
-
+    
     const monto = parseFloat(montoStr);
+
+    const resultado = await SubastaModel.registrarPuja(subastaId, USUARIO_ACTUAL_ID, monto);
+    
+    if (resultado.exito) {
+        SubastaView.mostrarMensaje('¡Puja registrada con éxito!');
+        // Si estamos en la vista de mis subastas, recargamos esa misma vista
+        if (window.location.pathname.includes('Subastas.html')) {
+            await inicializarVistaMisSubastas();
+        } else {
+            await cargarDatos();
+        }
+    } else {
+        SubastaView.mostrarMensaje(`Error: ${resultado.mensaje}`);
+    }
+    /*
     if (isNaN(monto) || monto < montoMinimoRequerido) {
         SubastaView.mostrarMensaje(`El monto ingresado no es válido o es menor al mínimo requerido ($${montoMinimoRequerido}).`);
         return;
@@ -118,6 +133,7 @@ async function manejarIntentoPuja(subastaId, montoMinimoRequerido) {
     } else {
         SubastaView.mostrarMensaje(`Error: ${resultado.mensaje}`);
     }
+        */
 }
 
 // ==========================================

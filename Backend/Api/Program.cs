@@ -1,17 +1,18 @@
 using System.Text;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.UseCases.Auditoria_log.Handlers;
 using Application.UseCases.Billetera.Handlers;
 using Application.UseCases.Categoria.Handlers;
+using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Handlers;
 using Application.UseCases.Usuario.Handlers;
-using Application.UseCases.Puja.Handlers;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,7 @@ builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerRepository>();
+builder.Services.AddScoped<IAuditoria_LogRepository, Auditoria_LogRepository>();
 
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
@@ -38,6 +40,7 @@ builder.Services.AddScoped<FinalizarSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastasConFiltroQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorVendedorQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorCompradorQueryHandler>();
+builder.Services.AddScoped<CrearAuditoria_LogCommandHandler>();
 
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
 

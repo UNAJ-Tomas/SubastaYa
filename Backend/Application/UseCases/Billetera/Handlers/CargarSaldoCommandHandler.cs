@@ -1,6 +1,9 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.UseCases.Auditoria_log.Commands;
+using Application.UseCases.Auditoria_log.Handlers;
 using Application.UseCases.Billetera.Commands;
+using Domain.Entities;
 
 namespace Application.UseCases.Billetera.Handlers
 {
@@ -8,13 +11,16 @@ namespace Application.UseCases.Billetera.Handlers
     {
         private readonly IBilleteraRepository _billeteraRepository;
         private readonly ITransaccionLedgerRepository _ledgerRepository;
+        private readonly CrearAuditoria_LogCommandHandler _crearauditoriaCommandHandler;
 
         public CargarSaldoCommandHandler(
             IBilleteraRepository billeteraRepository,
-            ITransaccionLedgerRepository ledgerRepository)
+            ITransaccionLedgerRepository ledgerRepository,
+            CrearAuditoria_LogCommandHandler crearauditoriaCommandHandler)
         {
             _billeteraRepository = billeteraRepository;
             _ledgerRepository = ledgerRepository;
+            _crearauditoriaCommandHandler = crearauditoriaCommandHandler;
         }
 
         public async Task<bool> HandleAsync(CargarSaldoCommand command, CancellationToken cancellationToken = default)
@@ -40,6 +46,15 @@ namespace Application.UseCases.Billetera.Handlers
 
                 await _billeteraRepository.UpdateAsync(billetera);
             }
+
+            CrearAuditoria_LogCommand auditoriaCommand = new CrearAuditoria_LogCommand
+            {
+                Entidad = "Billetera",
+                Entidad_id = billetera.id,
+                Accion = "ACREDITACION_MANUAL",
+                Usuario_id = command.UsuarioId,
+            };
+            await _crearauditoriaCommandHandler.HandleAsync(auditoriaCommand, command.Monto.ToString());
 
             return true;
         }
