@@ -1,10 +1,4 @@
 ﻿using Domain.Entities;
-using Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
@@ -12,6 +6,7 @@ namespace Application.Interfaces
     {
         Task AddAsync(Subasta subasta);
         Task<Subasta?> GetByIdAsync(int id);
+        Task<List<Subasta>> GetProgramadasIniciablesAsync(CancellationToken cancellationToken);
         Task<IEnumerable<Subasta>> GetAllActivasAsync();
         Task UpdateAsync(Subasta subasta);
 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Auditoria_log.Commands;
 using Domain.Entities;
@@ -25,7 +22,7 @@ namespace Application.UseCases.Auditoria_log.Handlers
                 entidad_id = command.Entidad_id,
                 accion = command.Accion,
                 usuario_id = command.Usuario_id,
-                detalle_json = await CreateDetalle_json(command.Accion, detalle),
+                detalle_json = CreateDetalle_json(command.Accion, detalle),
                 fecha = DateTime.UtcNow,
             };
 
@@ -33,7 +30,7 @@ namespace Application.UseCases.Auditoria_log.Handlers
 
             return auditoriaLog.id;
         }
-        private async Task<string> CreateDetalle_json(string accion, string detalle)
+        private string CreateDetalle_json(string accion, string detalle)
         {
             string json;
             object detalle_json;
@@ -69,6 +66,15 @@ namespace Application.UseCases.Auditoria_log.Handlers
                     detalle_json = new
                     {
                         monto_acreditado = detalle,
+                    };
+                    json = JsonSerializer.Serialize(detalle_json);
+                    break;
+
+                case "ABRIR_WORKER":
+                    detalle_json = new
+                    {
+                        estado_anterior = "PROGRAMADA",
+                        estado_nuevo = detalle,
                     };
                     json = JsonSerializer.Serialize(detalle_json);
                     break;

@@ -33,6 +33,9 @@ namespace Api.Middlewares
             {
                 NotFoundException => HttpStatusCode.NotFound,
                 ValidationException => HttpStatusCode.BadRequest,
+                UnauthorizedException => HttpStatusCode.Unauthorized,
+                ForbiddenException => HttpStatusCode.Forbidden,
+                ConflictException => HttpStatusCode.Conflict,
                 _ => HttpStatusCode.InternalServerError
             };
 

@@ -41,6 +41,7 @@ builder.Services.AddScoped<ObtenerSubastasConFiltroQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorVendedorQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorCompradorQueryHandler>();
 builder.Services.AddScoped<CrearAuditoria_LogCommandHandler>();
+builder.Services.AddScoped<IniciarSubastasProgramadasCommandHandler>();
 
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
 
@@ -56,6 +57,7 @@ builder.Services.AddScoped<RegistrarUsuarioCommandHandler>();
 
 // Registro del Background Worker para cierre automático
 builder.Services.AddHostedService<Infrastructure.Workers.SubastaWorker>();
+builder.Services.AddHostedService<Infrastructure.Workers.SubastaProgramadaWorker>();
 
 // 4. Autenticación JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");

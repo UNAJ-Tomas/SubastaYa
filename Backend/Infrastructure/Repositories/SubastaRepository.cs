@@ -29,9 +29,20 @@ public class SubastaRepository : ISubastaRepository
             .FirstOrDefaultAsync(s => s.id == id);
     }
 
+    public async Task<List<Subasta>> GetProgramadasIniciablesAsync(CancellationToken cancellationToken)
+    {
+        DateTime fechaActual = DateTime.UtcNow;
+        return await _context.Subasta
+        .Where(s =>
+            s.estado == EstadoSubasta.PROGRAMADA &&
+            s.fecha_inicio <= fechaActual &&
+            s.fecha_fin >= fechaActual)
+        .ToListAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Subasta>> GetAllActivasAsync()
     {
-        var fechaActual = DateTime.Now;
+        var fechaActual = DateTime.UtcNow;
 
         return await _context.Subasta
             .Include(s => s.Pujas) // <-- Trae las pujas asociadas
