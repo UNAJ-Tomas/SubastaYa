@@ -265,6 +265,16 @@ async function manejarIntentoPuja(subastaId, montoMinimoRequerido) {
 
 // ==========================================
 
+
+import { initDepositoView } from './view.js';
+//import { obtenerSaldoUsuario } from './model.js'; 
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const saldoInicial = 0; 
+    initDepositoView(saldoInicial);
+});
+
+
 async function inicializarVistaDepositar() {
 
     const billetera = await SubastaModel.obtenerBilleteraUsuario(USUARIO_ACTUAL_ID);

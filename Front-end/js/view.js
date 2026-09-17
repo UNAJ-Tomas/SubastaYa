@@ -110,3 +110,37 @@ export const SubastaView = {
         alert(mensaje);
     }
 };
+
+
+export function DepositoView(saldoInicial = 0) {
+    const inputMonto = document.getElementById('inputMonto');
+    const lblSaldoActual = document.getElementById('lblSaldoActual');
+    const resumenSaldoActual = document.getElementById('resumenSaldoActual');
+    const resumenDeposito = document.getElementById('resumenDeposito');
+    const resumenTotalFinal = document.getElementById('resumenTotalFinal');
+    const botonesMonto = document.querySelectorAll('.btn-monto');
+
+    let saldoBase = saldoInicial; 
+
+    function actualizarResumen() {
+        let montoIngresado = parseFloat(inputMonto.value) || 0;
+        lblSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
+        resumenSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
+        resumenDeposito.textContent = `$${montoIngresado.toLocaleString()}`;
+        resumenTotalFinal.textContent = `$${(saldoBase + montoIngresado).toLocaleString()}`;
+    }
+
+    inputMonto.addEventListener('input', actualizarResumen);
+
+    botonesMonto.forEach(btn => {
+        btn.addEventListener('click', () => {
+            botonesMonto.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            inputMonto.value = btn.getAttribute('data-valor');
+            actualizarResumen();
+        });
+    });
+
+    // Inicializar valores al cargar
+    actualizarResumen();
+}
