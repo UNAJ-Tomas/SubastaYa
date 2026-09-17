@@ -121,8 +121,6 @@ function configurarFiltrosYEventos() {
 
     const btnLimpiarFiltros = document.getElementById('btnLimpiarFiltros');
 
-
-
     if (inputBuscar) {
 
         inputBuscar.removeEventListener('input', aplicarFiltros); // Evitar duplicados
@@ -131,8 +129,6 @@ function configurarFiltrosYEventos() {
 
     }
 
-
-
     if (selectFiltroEstado) {
 
         selectFiltroEstado.removeEventListener('change', aplicarFiltros);
@@ -140,8 +136,6 @@ function configurarFiltrosYEventos() {
         selectFiltroEstado.addEventListener('change', aplicarFiltros);
 
     }
-
-
 
     if (btnLimpiarFiltros) {
         btnLimpiarFiltros.replaceWith(btnLimpiarFiltros.cloneNode(true)); 
@@ -197,7 +191,6 @@ function aplicarFiltros() {
                 : (s.categoria || s.categoriaNombre || '')
         );
         
-        // Capturamos el ID de forma segura
         const idCategoria = (
             typeof categoriaObj === 'object' && categoriaObj !== null 
                 ? (categoriaObj.id || categoriaObj.Id) 
