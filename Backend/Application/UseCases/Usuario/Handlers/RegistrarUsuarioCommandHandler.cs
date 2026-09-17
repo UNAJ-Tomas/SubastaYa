@@ -37,7 +37,7 @@ namespace Application.UseCases.Usuario.Handlers
             {
                 nombre = command.Nombre,
                 email = command.Email,
-                password_hash = command.Password // ( acá aplico hashing si corresponde)
+                password_hash = command.Password.Trim() // ( acá aplico hashing si corresponde)
             };
 
             var usuarioId = await _usuarioRepository.AddAsync(usuario);

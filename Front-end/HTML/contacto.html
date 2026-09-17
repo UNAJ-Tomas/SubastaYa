@@ -36,26 +36,58 @@
             background-color: rgba(255, 255, 255, 0.98) !important;
             border-radius: 1rem !important;
         }
+        .btn-action-custom {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-action-custom:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- =========================
-         NAVBAR
-    ========================== -->
+         NAVBAR IDÉNTICO AL HOME
+    ========================= -->
     <nav class="navbar navbar-expand-lg navbar-dark px-4 mb-5 py-3" style="background-color: #0d3b2e; border-bottom: 3px solid #198754; box-shadow: 0 4px 12px rgba(13, 59, 46, 0.2);">
-        <div class="container">
+        <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand fw-bold fs-4 text-white text-decoration-none" href="home.html">
                 SubastaYa <span class="text-warning">🔨</span>
             </a>
 
-            <!-- Opciones derechas -->
-            <div class="d-flex align-items-center gap-4">
-                <a href="home.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2">
+            <div class="d-flex align-items-center flex-wrap gap-3">
+                <!-- Botón de Volver al Inicio -->
+                <a href="home.html" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm text-decoration-none" style="background-color: #157347; border: 1px solid #28a745;">
                     <i class="bi bi-house-door"></i> Volver al Inicio
                 </a>
+
+                
+
+                <a href="crearSubasta.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                    <i class="bi bi-plus-circle me-1"></i> Publicar Subasta
+                </a>
+
+                <!-- Botón Mis Subastas -->
+                <a href="miSubastas.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
+                    <i class="bi bi-hammer"></i> Mis Subastas
+                </a>
+
+                <!-- Botón Depositar -->
+                <a href="depositar.html" class="btn btn-warning btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm text-dark btn-action-custom text-decoration-none">
+                    <i class="bi bi-wallet2"></i> Depositar
+                </a>
+
+                <!-- Botón Historial -->
+                <a href="historial.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
+                    <i class="bi bi-clock-history"></i> Historial
+                </a>
+
+                 <!-- Saldo de Billetera -->
+                <div class="badge bg-success bg-opacity-75 border border-success px-3 py-2 rounded-pill fs-6 fw-semibold text-white shadow-sm" id="lblSaldo">
+                    Disponible: $0
+                </div>
             </div>
         </div>
     </nav>
@@ -63,7 +95,7 @@
 
     <!-- =========================
          CONTENIDO DE CONTACTO
-    ========================== -->
+    ========================= -->
     <main class="flex-grow-1">
         <div class="container py-4" style="max-width: 900px;">
             
@@ -135,7 +167,7 @@
 
     <!-- =========================
          FOOTER
-    ========================== -->
+    ========================= -->
     <footer class="bg-dark text-white mt-5">
         <div class="container py-4 text-center text-secondary">
             <p class="mb-0">© 2026 SubastaYa — Todos los derechos reservados.</p>
@@ -144,6 +176,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JavaScript  -->
+    <script type="module" src="../js/controller.js"></script>
 </body>
 
 </html>

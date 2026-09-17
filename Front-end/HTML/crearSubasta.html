@@ -1,67 +1,162 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SubastaYa - Crear Subasta</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-</head>
-<body class="bg-light">
 
-    <nav class="navbar navbar-dark px-4 py-3 mb-4" style="background-color: #0d3b2e; border-bottom: 3px solid #198754;">
-        <a class="navbar-brand fw-bold text-white text-decoration-none" href="home.html">SubastaYa 🔨</a>
-        <a href="home.html" class="btn btn-outline-light btn-sm rounded-pill px-3">Volver al Inicio</a>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            min-height: 100vh;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=1920&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .card-custom {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            border-radius: 1rem !important;
+        }
+        .btn-action-custom {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-action-custom:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body class="bg-light d-flex flex-column min-vh-100">
+
+    <!-- =========================
+         NAVBAR UNIFICADO
+    ========================= -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 mb-4 py-3" style="background-color: #0d3b2e; border-bottom: 3px solid #198754; box-shadow: 0 4px 12px rgba(13, 59, 46, 0.2);">
+        <div class="container-fluid">
+            <!-- Logo -->
+            <a class="navbar-brand fw-bold fs-4 text-white text-decoration-none" href="home.html">
+                SubastaYa <span class="text-warning">🔨</span>
+            </a>
+
+            <div class="d-flex align-items-center flex-wrap gap-3">
+                
+                <a href="crearSubasta.html" class="btn btn-outline-light btn-sm rounded-pill px-3 active">
+                    <i class="bi bi-plus-circle me-1"></i> Publicar Subasta
+                </a>
+
+                <!-- Botón Mis Subastas -->
+                <a href="miSubastas.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
+                    <i class="bi bi-hammer"></i> Mis Subastas
+                </a>
+
+                <!-- Saldo de Billetera -->
+                <div class="badge bg-success bg-opacity-75 border border-success px-3 py-2 rounded-pill fs-6 fw-semibold text-white shadow-sm" id="lblSaldo">
+                    Disponible: $0
+                </div>
+
+                <!-- Botón Depositar -->
+                <a href="depositar.html" class="btn btn-warning btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm text-dark btn-action-custom text-decoration-none">
+                    <i class="bi bi-wallet2"></i> Depositar
+                </a>
+
+                <!-- Botón Historial -->
+                <a href="historial.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
+                    <i class="bi bi-clock-history"></i> Historial
+                </a>
+
+                <!-- Botón de Volver al Inicio (Ubicado al final del nav) -->
+                <a href="home.html" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm text-decoration-none" style="background-color: #157347; border: 1px solid #28a745;">
+                    <i class="bi bi-house-door"></i> Volver al Inicio
+                </a>
+            </div>
+        </div>
     </nav>
 
-    <div class="container py-4" style="max-width: 600px;">
-        <div class="card shadow-sm border-0 p-4">
-            <h3 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-success me-2"></i> Publicar Nueva Subasta</h3>
-            <p class="text-secondary small mb-4">Completa los datos del producto o artículo que deseas poner en subasta.</p>
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================= -->
+    <main class="flex-grow-1">
+        <div class="container py-4" style="max-width: 600px;">
+            <div class="card card-custom shadow-sm border-0 p-4">
+                <h3 class="fw-bold text-dark mb-3"><i class="bi bi-plus-circle text-success me-2"></i> Publicar Nueva Subasta</h3>
+                <p class="text-secondary small mb-4">Completa los datos del producto o artículo que deseas poner en subasta.</p>
 
-            <form id="formCrearSubasta">
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Título del producto</label>
-                    <input type="text" id="titulo" class="form-control" required placeholder="Ej: PlayStation 5 Usada">
-                </div>
-
-                <div class="mb-3">
-                <label for="urlImagen" class="form-label">URL de la Imagen</label>
-                <input type="text" class="form-control" id="urlImagen" placeholder="https://ejemplo.com/imagen.jpg" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Descripción</label>
-                    <textarea id="descripcion" class="form-control" rows="3" required placeholder="Detalles, estado y características..."></textarea>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">Precio Inicial ($)</label>
-                        <input type="number" id="precioInicial" class="form-control" required min="1" placeholder="Ej: 50000">
+                <form id="formCrearSubasta">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Título del producto</label>
+                        <input type="text" id="titulo" class="form-control" required placeholder="Ej: PlayStation 5 Usada">
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label fw-semibold">Categoría</label>
-                        <select id="categoriaId" class="form-select" required>
-                            <option value="">Selecciona...</option>
-                            <option value="1">Tecnología</option>
-                            <option value="2">Hogar</option>
-                            <option value="3">Vehículos</option>
-                            <option value="4">Otros</option>
-                        </select>
+
+                    <div class="mb-3">
+                        <label for="urlImagen" class="form-label fw-semibold">URL de la Imagen</label>
+                        <input type="text" class="form-control" id="urlImagen" placeholder="https://ejemplo.com/imagen.jpg" required>
                     </div>
-                </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-semibold">Fecha y Hora de Cierre</label>
-                    <input type="datetime-local" id="fechaFin" class="form-control" required>
-                </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Descripción</label>
+                        <textarea id="descripcion" class="form-control" rows="3" required placeholder="Detalles, estado y características..."></textarea>
+                    </div>
 
-                <button type="submit" class="btn btn-success w-100 py-2 fw-semibold rounded-pill">Publicar Subasta</button>
-            </form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Precio Inicial ($)</label>
+                            <input type="number" id="precioInicial" class="form-control" required min="1" placeholder="Ej: 50000">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Categoría</label>
+                            <select id="categoriaId" class="form-select" required>
+                                <option value="">Selecciona...</option>
+                                <option value="1">Tecnología</option>
+                                <option value="2">Hogar</option>
+                                <option value="3">Vehículos</option>
+                                <option value="4">Otros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Fecha y Hora de Cierre</label>
+                        <input type="datetime-local" id="fechaFin" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-semibold rounded-pill shadow-sm">Publicar Subasta</button>
+                </form>
+            </div>
         </div>
-    </div>
+    </main>
 
+    <!-- =========================
+         FOOTER
+    ========================= -->
+    <footer class="bg-dark text-white mt-5">
+        <div class="container py-4 text-center text-secondary">
+            <p class="mb-0">© 2026 SubastaYa — Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Controlador JS  -->
     <script type="module" src="../js/controller.js"></script>
 </body>
+
 </html>

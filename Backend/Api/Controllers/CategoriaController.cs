@@ -1,10 +1,12 @@
-﻿using Domain.Entities;
-using Application.UseCases.Categoria.Handlers;
+﻿using Application.UseCases.Categoria.Handlers;
 using Application.UseCases.Categoria.Queries;
+using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CategoriaController : ControllerBase

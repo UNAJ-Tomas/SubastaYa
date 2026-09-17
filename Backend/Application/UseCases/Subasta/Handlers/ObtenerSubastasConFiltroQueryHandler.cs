@@ -15,7 +15,7 @@ namespace Application.UseCases.Subasta.Handlers
             _subastaRepository = subastaRepository;
         }
 
-        public async Task<IEnumerable<Domain.Entities.Subasta>> Handle(FiltroSubastasDto filtro)
+        public async Task<IEnumerable<Domain.Entities.Subasta>> HandleAsync(FiltroSubastasDto filtro)
         {
             var subastas = await _subastaRepository.GetAllActivasAsync();
             var query = subastas.AsQueryable();

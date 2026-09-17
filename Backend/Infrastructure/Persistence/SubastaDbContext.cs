@@ -25,7 +25,7 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // 1. Relación 1:1 Usuario - Billetera (EF necesita saber qué tabla lleva la FK)
+            // 1. Relación 1:1 Usuario - Billetera 
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Billetera)
                 .WithOne(b => b.Usuario)
@@ -65,7 +65,7 @@ namespace Infrastructure.Persistence
                  .WithMany()
                  .HasForeignKey(x => x.billetera_id);
 
-                // Indicar que la relación con Subasta es opcional
+                // Indica que la relación con Subasta es opcional
                 t.HasOne(x => x.Subasta)
                  .WithMany()
                  .HasForeignKey(x => x.subasta_id)

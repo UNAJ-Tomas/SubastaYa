@@ -25,10 +25,8 @@ export const SubastaView = {
                 ? Math.max(...subasta.pujas.map(p => p.monto))
                 : subasta.precio_base;
 
-            // Identificamos quién va ganando (buscando la puja más alta en el array)
             let liderTexto = 'Sin ofertas aún';
             if (subasta.pujas && subasta.pujas.length > 0) {
-                // Buscamos la puja que coincida con el monto máximo
                 const pujaGanadora = subasta.pujas.find(p => p.monto === pujaMayor);
                 if (pujaGanadora && (pujaGanadora.usuarioNombre || pujaGanadora.comprador_id)) {
                     liderTexto = pujaGanadora.usuarioNombre || `Usuario #${pujaGanadora.comprador_id}`;
@@ -37,6 +35,23 @@ export const SubastaView = {
 
             // Imagen por defecto si no viene cargada o está vacía
             const imagenSrc = subasta.url_imagen || subasta.urlImagen || 'https://via.placeholder.com/300x200?text=Sin+Imagen';
+
+            const fechaFin = new Date(subasta.fecha_fin);
+            const ahora = new Date();
+            const esFinalizada = subasta.estado === 'finalizada' || fechaFin < ahora;
+
+            const badgeEstado = esFinalizada
+                ? `<span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill fw-semibold"><i class="bi bi-x-circle-fill me-1"></i> Finalizada</span>`
+                : `<span class="badge bg-warning bg-opacity-25 text-dark px-3 py-2 rounded-pill fw-semibold"><i class="bi bi-clock me-1"></i> ${fechaFin.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} hs</span>`;
+
+            // Si está finalizada, podemos deshabilitar el botón de ofertar o cambiar su aspecto
+            const botonOfertarHtml = esFinalizada
+                ? `<button class="btn btn-secondary w-100 fw-semibold py-2 rounded-pill shadow-sm" disabled>
+                       <i class="bi bi-lock-fill me-1"></i> Subasta Finalizada
+                   </button>`
+                : `<button class="btn btn-success w-100 fw-semibold py-2 rounded-pill btn-pujar shadow-sm" data-id="${subasta.id}" data-minimo="${pujaMayor + subasta.incremento_minimo}">
+                       <i class="bi bi-hammer me-1"></i> Ofertar / Pujar
+                   </button>`;
 
             const card = document.createElement('div');
             card.className = 'col-md-6 col-lg-4'; 
@@ -47,14 +62,12 @@ export const SubastaView = {
                     
                     <div class="card-body d-flex flex-column justify-content-between p-3">
                         <div>
-                            <!-- Cabecera de la tarjeta: ID y Vencimiento -->
+                            <!-- Cabecera de la tarjeta: ID y Vencimiento / Estado -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-semibold">
                                     <i class="bi bi-tag-fill me-1"></i> ID #${subasta.id}
                                 </span>
-                                <span class="badge bg-warning bg-opacity-25 text-dark px-3 py-2 rounded-pill fw-semibold">
-                                    <i class="bi bi-clock me-1"></i> ${new Date(subasta.fecha_fin).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} hs
-                                </span>
+                                ${badgeEstado}
                             </div>
 
                             <!-- Título y Descripción -->
@@ -76,18 +89,18 @@ export const SubastaView = {
                                 </div>
                             </div>
 
-                            <!-- Botón de Ofertar -->
-                            <button class="btn btn-success w-100 fw-semibold py-2 rounded-pill btn-pujar shadow-sm" data-id="${subasta.id}" data-minimo="${pujaMayor + subasta.incremento_minimo}">
-                                <i class="bi bi-hammer me-1"></i> Ofertar / Pujar
-                            </button>
+                            <!-- Botón de Ofertar / Finalizada -->
+                            ${botonOfertarHtml}
                         </div>
                     </div>
                 </div>
             `;
 
-            card.querySelector('.btn-pujar').addEventListener('click', () => {
-                onPujarCallback(subasta.id, pujaMayor + subasta.incremento_minimo);
-            });
+            if (!esFinalizada) {
+                card.querySelector('.btn-pujar').addEventListener('click', () => {
+                    onPujarCallback(subasta.id, pujaMayor + subasta.incremento_minimo);
+                });
+            }
 
             contenedor.appendChild(card);
         });

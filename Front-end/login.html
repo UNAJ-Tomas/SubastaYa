@@ -60,26 +60,42 @@
     document.querySelector('form').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Asegurate de que el input en tu HTML tenga id="inputId" o ajusta el selector acá
-        const userId = document.getElementById('inputId').value.trim();
+        const email = document.getElementById('inputEmail').value.trim();
+        const password = document.getElementById('inputPassword').value.trim();
 
-        if (!userId) {
-            alert('Por favor ingresá un ID de usuario válido.');
+        if (!email || !password) {
+            alert('Por favor, completa todos los campos.');
             return;
         }
 
         try {
-            sessionStorage.setItem('usuarioActualId', userId);
-            sessionStorage.setItem('usuarioLogueado', `Usuario_${userId}`);
+            // Ajusta la URL según el puerto y la ruta de tu controlador en el Backend (C#)
+            const response = await fetch('https://localhost:7083/api/Usuarios/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+        });
 
-            console.log("ID de usuario guardado en sesión:", userId);
+            if (!response.ok) {
+                // Si el backend devuelve un 400, 401, etc., las credenciales son incorrectas
+                alert('Correo o contraseña incorrectos.');
+                return;
+            }
 
-            // Redirección corregida
+            const data = await response.json();
+
+            sessionStorage.setItem('tokenJWT', data.token);
+            sessionStorage.setItem('usuarioActualId', data.id);
+            sessionStorage.setItem('usuarioLogueado', data.email);
+
+            // Redirigimos al home solo si la autenticación fue exitosa
             window.location.href = 'HTML/home.html';
 
         } catch (error) {
-            console.error('Error al iniciar sesión:', error);
-            alert('Ocurrió un error al procesar el acceso.');
+            console.error('Error de conexión con el servidor:', error);
+            alert('No se pudo conectar con el servidor. Inténtalo más tarde.');
         }
     });
 </script>

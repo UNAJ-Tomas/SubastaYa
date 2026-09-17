@@ -31,7 +31,7 @@ builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerReposi
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
-builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
+builder.Services.AddTransient<ObtenerSubastasActivasPorCompradorQueryHandler>();
 builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
 builder.Services.AddScoped<CancelarSubastaCommandHandler>();
 builder.Services.AddScoped<FinalizarSubastaCommandHandler>();
@@ -77,7 +77,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 5. Configuración de Swagger para probar los Tokens
+//  Configuración de Swagger para probar los Tokens
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SubastaYa API", Version = "v1" });
@@ -141,8 +141,8 @@ using (var scope = app.Services.CreateScope())
         //context.Database.EnsureDeleted();
         //context.Database.EnsureCreated();
         //context.Database.Migrate();
-        context.Database.EnsureDeleted();   
-        context.Database.EnsureCreated();
+        //context.Database.EnsureDeleted();   
+        //context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {

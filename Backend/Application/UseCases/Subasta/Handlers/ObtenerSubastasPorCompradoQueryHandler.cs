@@ -7,14 +7,14 @@ namespace Application.UseCases.Subasta.Handlers
     {
         private readonly ISubastaRepository _subastaRepository;
 
-        public ObtenerSubastasPorCompradorQueryHandler(ISubastaRepository subastaRepository)
+        public  ObtenerSubastasPorCompradorQueryHandler(ISubastaRepository subastaRepository)
         {
-            _subastaRepository = subastaRepository;
+             _subastaRepository = subastaRepository;
         }
 
-        public async Task<IEnumerable<Domain.Entities.Subasta>> Handle(ObtenerSubastasPorCompradorQuery query)
+        public async Task<IEnumerable<Domain.Entities.Subasta>> HandleAsync(ObtenerSubastasPorCompradorQuery query)
         {
-            var subastas = await _subastaRepository.GetAllActivasAsync();
+            var subastas = await _subastaRepository.GetAllWithPujasAsync();
             return subastas.Where(s => s.Pujas != null && s.Pujas.Any(p => p.comprador_id == query.CompradorId)).ToList();
         }
     }

@@ -38,7 +38,7 @@ namespace Application.UseCases.Subasta.Handlers
             //verificamos que la puja no sea nula
             if (pujaGanadora != null)
             {
-                // A. Consolidar débito en el Comprador Ganador (pasa de saldo_retenido a cobro definitivo)
+                // Consolidar débito en el Comprador Ganador (pasa de saldo_retenido a cobro definitivo)
                 var billeteraComprador = await _billeteraRepository.GetByUsuarioIdAsync(pujaGanadora.comprador_id);
                 if (billeteraComprador != null)
                 {
@@ -56,7 +56,7 @@ namespace Application.UseCases.Subasta.Handlers
                     });
                 }
 
-                // B. Acreditar ingresos en la Billetera del Vendedor
+                // Acreditar ingresos en la Billetera del Vendedor
                 var billeteraVendedor = await _billeteraRepository.GetByUsuarioIdAsync(subasta.vendedor_id);
                 if (billeteraVendedor != null)
                 {

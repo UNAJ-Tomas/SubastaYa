@@ -48,15 +48,20 @@
         .btn-action-custom:hover {
             transform: translateY(-2px);
         }
+        .btn-outline-light-custom:hover {
+            background-color: #ffffff !important;
+            color: #0d3b2e !important;
+            border-color: #ffffff !important;
+        }
     </style>
 </head>
 
 <body class="bg-light d-flex flex-column min-vh-100">
 
     <!-- =========================
-         NAVBAR
-    ========================== -->
- <nav class="navbar navbar-expand-lg navbar-dark px-4 mb-5 py-3" style="background-color: #0d3b2e; border-bottom: 3px solid #198754; box-shadow: 0 4px 12px rgba(13, 59, 46, 0.2);">
+          NAVBAR
+    ================         ========= -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4 mb-5 py-3" style="background-color: #0d3b2e; border-bottom: 3px solid #198754; box-shadow: 0 4px 12px rgba(13, 59, 46, 0.2);">
         <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand fw-bold fs-4 text-white text-decoration-none" href="home.html">
@@ -64,45 +69,51 @@
             </a>
 
             <div class="d-flex align-items-center flex-wrap gap-3">
-                <!-- Botón de Contacto -->
-                <a href="contacto.html" class="btn btn-success btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2 shadow-sm text-decoration-none" style="background-color: #157347; border: 1px solid #28a745;">
-                    <span>💬</span> Contacto
-                </a>
-
                 <div class="text-white-50 small d-none d-md-block">
                     Usuario: <strong class="text-white" id="lblUsuario">Cargando...</strong>
                 </div>
 
-                <a href="crearSubasta.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+                <!-- Botón Publicar Subasta -->
+                <a href="crearSubasta.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none btn-outline-light-custom">
                     <i class="bi bi-plus-circle me-1"></i> Publicar Subasta
                 </a>
 
                 <!-- Botón Mis Subastas -->
-                <a href="miSubastas.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
-                    <i class="bi bi-hammer"></i> Mis Subastas
+                <a href="miSubastas.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none btn-outline-light-custom">
+                    <i class="bi bi-hammer me-1"></i> Mis Subastas
                 </a>
 
-                <!-- Saldo de Billetera -->
-                <div class="badge bg-success bg-opacity-75 border border-success px-3 py-2 rounded-pill fs-6 fw-semibold text-white shadow-sm" id="lblSaldo">
-                    Disponible: $0
-                </div>
-
-                <!-- Botón Depositar (Vinculado a depositar.html) -->
+                <!-- Botón Depositar -->
                 <a href="depositar.html" class="btn btn-warning btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm text-dark btn-action-custom text-decoration-none">
                     <i class="bi bi-wallet2"></i> Depositar
                 </a>
 
-                <!-- Botón Historial (Vinculado a transacciones.html) -->
-                <a href="transacciones.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none">
+                <!-- Botón Historial -->
+                <a href="historial.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none btn-outline-light-custom">
                     <i class="bi bi-clock-history"></i> Historial
                 </a>
+
+                <!-- Botón de Contacto -->
+                <a href="contacto.html" class="btn btn-outline-light btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom text-decoration-none btn-outline-light-custom">
+                    <i class="bi bi-chat-dots"></i> Contacto
+                </a>
+
+                 <!-- Saldo de Billetera -->
+                <div class="badge bg-success bg-opacity-75 border border-success px-3 py-2 rounded-pill fs-6 fw-semibold text-white shadow-sm" id="lblSaldo">
+                    Disponible: $0
+                </div>
+
+                <!-- Botón Cerrar Sesión -->
+                <button id="btnCerrarSesion" class="btn btn-outline-danger btn-sm rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1 shadow-sm btn-action-custom">
+                    <i class="bi bi-box-arrow-right"></i> Salir
+                </button>
             </div>
         </div>
     </nav>
 
     <!-- =========================
-         CONTENIDO
-    ========================== -->
+          CONTENIDO
+    ================         ========= -->
     <main class="flex-grow-1">
         <div class="container py-5">
 
@@ -124,8 +135,8 @@
             </div>
 
             <!-- =========================
-                 SECCIÓN DE FILTROS
-            ========================== -->
+                SECCIÓN DE FILTROS
+            ================         ========= -->
             <div class="card border-0 shadow-sm rounded-4 p-3 mb-5" style="background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);">
                 <div class="row g-3 align-items-center">
                     <!-- Filtrar por texto (Buscador) -->
@@ -162,8 +173,8 @@
             </div>
 
             <!-- =========================
-                 SUBASTAS
-            ========================== -->
+                SUBASTAS
+            ================         ========= -->
             <div class="row g-4" id="contenedorSubastas">
                 <!-- Spinner de Carga Inicial -->
                 <div class="col-12 text-center py-5">
@@ -178,8 +189,8 @@
     </main>
 
     <!-- =========================
-         FOOTER
-    ========================== -->
+          FOOTER
+    ================         ========= -->
     <footer class="bg-dark text-white mt-5">
         <div class="container py-5">
             <div class="row g-4">
@@ -231,10 +242,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    
     <!-- JavaScript de la aplicación -->
     <script type="module" src="../js/controller.js"></script>
 
 </body>
-
 </html>
