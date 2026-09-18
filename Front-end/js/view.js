@@ -1,6 +1,6 @@
 export const SubastaView = {
     renderizarUsuario(usuarioId, saldo) {
-        document.getElementById('lblUsuario').textContent = `Usuario #${usuarioId}`;
+        document.getElementById('lblUsuario').textContent = `Usuario #${usuarioId.usuarioNombre}`;
         document.getElementById('lblSaldo').textContent = `Disponible: $${saldo}`;
     },
 

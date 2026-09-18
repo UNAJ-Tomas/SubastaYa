@@ -177,6 +177,12 @@ function aplicarFiltros() {
     const texto = inputBuscar ? inputBuscar.value.toLowerCase() : '';
     const valorSeleccionado = selectFiltroEstado ? selectFiltroEstado.value.toLowerCase() : 'todos';
 
+    // 🔎 AGREGÁ ESTO PARA INSPECCIONAR QUÉ LLEGA DE LA API:
+    if (subastasActuales.length > 0) {
+        console.log("Estructura de la primera subasta:", subastasActuales[0]);
+        console.log("Valor seleccionado en el select:", valorSeleccionado);
+    }
+
     // Función auxiliar para ignorar tildes, acentos y mayúsculas/minúsculas
     const normalizar = (texto) => String(texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
