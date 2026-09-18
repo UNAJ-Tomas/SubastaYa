@@ -174,44 +174,45 @@ async function cargarDatosHome() {
 function aplicarFiltros() {
     const inputBuscar = document.getElementById('inputBuscar');
     const selectFiltroEstado = document.getElementById('selectFiltroEstado');
-    const texto = inputBuscar ? inputBuscar.value.toLowerCase() : '';
-    const valorSeleccionado = selectFiltroEstado ? selectFiltroEstado.value.toLowerCase() : 'todos';
 
-    console.log(selectFiltroEstado.value);
-    // 🔎 AGREGÁ ESTO PARA INSPECCIONAR QUÉ LLEGA DE LA API:
-    if (subastasActuales.length > 0) {
-        //console.log("Estructura de la primera subasta:", subastasActuales[0]);
-        //console.log("Valor seleccionado en el select:", valorSeleccionado);
-    }
+    const texto = inputBuscar
+        ? inputBuscar.value.toLowerCase()
+        : '';
 
-    // Función auxiliar para ignorar tildes, acentos y mayúsculas/minúsculas
-    const normalizar = (texto) => String(texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const valorSeleccionado = selectFiltroEstado
+        ? selectFiltroEstado.value
+        : 'todos';
 
     const subastasFiltradas = subastasActuales.filter(s => {
-        const coincideTexto = s.titulo.toLowerCase().includes(texto) ||
-                            (s.descripcion && s.descripcion.toLowerCase().includes(texto));
-       
-        const categoriaObj = s.categoria || s.Categoria;
-        const nombreCategoria = (
-            typeof categoriaObj === 'object' && categoriaObj !== null 
-                ? (categoriaObj.nombre || categoriaObj.Nombre || '') 
-                : (s.categoria || s.categoriaNombre || '')
-        );
-        
-        const idCategoria = (
-            typeof categoriaObj === 'object' && categoriaObj !== null 
-                ? (categoriaObj.id || categoriaObj.Id) 
-                : (s.categoriaId || s.idCategoria)
-        );
-        console.log("Esto es un test: " + selectFiltroEstado.value);
-        const coincideCategoria = valorSeleccionado === 'todos' ||
-                                 normalizar(nombreCategoria).includes(normalizar(valorSeleccionado)) ||
-                                 String(idCategoria) === String(selectFiltroEstado.value);
+
+        // Filtro por texto
+        const coincideTexto =
+            s.titulo.toLowerCase().includes(texto) ||
+            (s.descripcion &&
+             s.descripcion.toLowerCase().includes(texto));
+
+        // La API devuelve el ID como "categoria_id"
+        const idCategoria = s.categoria_id;
+
+        // Filtro por categoría
+        const coincideCategoria =
+            valorSeleccionado === 'todos' ||
+            String(idCategoria) === String(valorSeleccionado);
+
+        console.log({
+            titulo: s.titulo,
+            idCategoria: idCategoria,
+            valorSeleccionado: valorSeleccionado,
+            coincideCategoria: coincideCategoria
+        });
 
         return coincideTexto && coincideCategoria;
     });
 
-    SubastaView.renderizarSubastas(subastasFiltradas, manejarIntentoPuja);
+    SubastaView.renderizarSubastas(
+        subastasFiltradas,
+        manejarIntentoPuja
+    );
 }
 
 
