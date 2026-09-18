@@ -4,8 +4,9 @@ import { SubastaView } from './view.js';
 
 
 
-const USUARIO_ACTUAL_ID = 1; // Simulamos el usuario logueado
+//const USUARIO_ACTUAL_ID = 1; // Simulamos el usuario logueado
 
+const USUARIO_ACTUAL_ID = sessionStorage.getItem('usuarioId') || 1;
 let subastasActuales = []; // Variable genérica para almacenar las subastas de la vista actual
 
 
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (document.getElementById('inputMonto')) {
 
-        await inicializarVistaDepositar();
+        await inicializarVistaDepositar(USUARIO_ACTUAL_ID);
 
         return;
 
@@ -174,37 +175,49 @@ function aplicarFiltros() {
     const inputBuscar = document.getElementById('inputBuscar');
     const selectFiltroEstado = document.getElementById('selectFiltroEstado');
 
-    const texto = inputBuscar ? inputBuscar.value.toLowerCase() : '';
-    const valorSeleccionado = selectFiltroEstado ? selectFiltroEstado.value.toLowerCase() : 'todos';
+    const texto = inputBuscar
+        ? inputBuscar.value.toLowerCase()
+        : '';
 
-    // Función auxiliar para ignorar tildes, acentos y mayúsculas/minúsculas
-    const normalizar = (texto) => String(texto || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+    const valorSeleccionado = selectFiltroEstado
+        ? selectFiltroEstado.value
+        : 'todos';
 
     const subastasFiltradas = subastasActuales.filter(s => {
-        const coincideTexto = s.titulo.toLowerCase().includes(texto) ||
-                            (s.descripcion && s.descripcion.toLowerCase().includes(texto));
-       
-        const categoriaObj = s.categoria || s.Categoria;
-        const nombreCategoria = (
-            typeof categoriaObj === 'object' && categoriaObj !== null 
-                ? (categoriaObj.nombre || categoriaObj.Nombre || '') 
-                : (s.categoria || s.categoriaNombre || '')
-        );
-        
-        const idCategoria = (
-            typeof categoriaObj === 'object' && categoriaObj !== null 
-                ? (categoriaObj.id || categoriaObj.Id) 
-                : (s.categoriaId || s.idCategoria)
-        );
 
-        const coincideCategoria = valorSeleccionado === 'todos' ||
-                                 normalizar(nombreCategoria).includes(normalizar(valorSeleccionado)) ||
-                                 String(idCategoria) === String(selectFiltroEstado.value);
+        // Filtro por texto
+        const coincideTexto =
+            s.titulo.toLowerCase().includes(texto) ||
+            (s.descripcion &&
+             s.descripcion.toLowerCase().includes(texto));
+
+        // La API devuelve el ID como "categoria_id"
+        const idCategoria = s.categoria_id;
+
+        // Filtro por categoría
+        const coincideCategoria =
+            valorSeleccionado === 'todos' ||
+            String(idCategoria) === String(valorSeleccionado);
+
+        console.log({
+            titulo: s.titulo,
+            idCategoria: idCategoria,
+            valorSeleccionado: valorSeleccionado,
+            coincideCategoria: coincideCategoria
+        });
 
         return coincideTexto && coincideCategoria;
     });
 
-    SubastaView.renderizarSubastas(subastasFiltradas, manejarIntentoPuja);
+    console.log("SUBASTAS ORIGINALES:", subastasActuales);
+    console.log("SUBASTAS FILTRADAS:", subastasFiltradas);
+    console.log("CANTIDAD ORIGINAL:", subastasActuales.length);
+    console.log("CANTIDAD FILTRADA:", subastasFiltradas.length);
+
+    SubastaView.renderizarSubastas(
+        subastasFiltradas,
+        manejarIntentoPuja
+    );
 }
 
 
@@ -266,13 +279,13 @@ async function manejarIntentoPuja(subastaId, montoMinimoRequerido) {
 // ==========================================
 
 
-import { initDepositoView } from './view.js';
+/* import { initDepositoView } from './view.js';
 //import { obtenerSaldoUsuario } from './model.js'; 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const saldoInicial = 0; 
-    initDepositoView(saldoInicial);
-});
+    const saldoInicial = await SubastaModel.obtenerBilleteraUsuario(USUARIO_ACTUAL_ID);
+    initDepositoView(saldoInicial.saldoDisponible);
+}); */
 
 
 async function inicializarVistaDepositar() {
