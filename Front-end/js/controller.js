@@ -174,14 +174,14 @@ async function cargarDatosHome() {
 function aplicarFiltros() {
     const inputBuscar = document.getElementById('inputBuscar');
     const selectFiltroEstado = document.getElementById('selectFiltroEstado');
-
     const texto = inputBuscar ? inputBuscar.value.toLowerCase() : '';
     const valorSeleccionado = selectFiltroEstado ? selectFiltroEstado.value.toLowerCase() : 'todos';
 
+    console.log(selectFiltroEstado.value);
     // 🔎 AGREGÁ ESTO PARA INSPECCIONAR QUÉ LLEGA DE LA API:
     if (subastasActuales.length > 0) {
-        console.log("Estructura de la primera subasta:", subastasActuales[0]);
-        console.log("Valor seleccionado en el select:", valorSeleccionado);
+        //console.log("Estructura de la primera subasta:", subastasActuales[0]);
+        //console.log("Valor seleccionado en el select:", valorSeleccionado);
     }
 
     // Función auxiliar para ignorar tildes, acentos y mayúsculas/minúsculas
@@ -203,7 +203,7 @@ function aplicarFiltros() {
                 ? (categoriaObj.id || categoriaObj.Id) 
                 : (s.categoriaId || s.idCategoria)
         );
-
+        console.log("Esto es un test: " + selectFiltroEstado.value);
         const coincideCategoria = valorSeleccionado === 'todos' ||
                                  normalizar(nombreCategoria).includes(normalizar(valorSeleccionado)) ||
                                  String(idCategoria) === String(selectFiltroEstado.value);
