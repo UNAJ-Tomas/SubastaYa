@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 public class SubastasController : ControllerBase
 {
 
-    //atributos
     private readonly CrearSubastaCommandHandler _crearSubastaHandler;
     private readonly ActualizarSubastaCommandHandler _actualizarSubastaHandler;
     private readonly CancelarSubastaCommandHandler _cancelarSubastaHandler;
@@ -21,7 +20,6 @@ public class SubastasController : ControllerBase
     private readonly ObtenerSubastasActivasQueryHandler _obtenerSubastasActivasHandler;
     private readonly RegistrarPujaCommandHandler _registrarPujaCommandHandler;
 
-    //constructor
     public SubastasController(
     RegistrarPujaCommandHandler registrarPujaCommandHandler, 
     ObtenerSubastasPorCompradorQueryHandler obtenerSubastaPorCompradorQueryHandler,
@@ -41,7 +39,6 @@ public class SubastasController : ControllerBase
     }
 
 
-    //metodos
 
     [HttpPost]
     public async Task<IActionResult> Crear(CrearSubastaCommand command)
@@ -101,7 +98,6 @@ public class SubastasController : ControllerBase
             mensaje = "Puja registrada exitosamente",
             exito = resultado
         });
-        //return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });
     }
 
     [HttpGet("usuario/{usuarioId}/participadas")]

@@ -16,7 +16,6 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// REGISTRAR EL DBCONTEXT
 builder.Services.AddDbContext<SubastaDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContextFactory<SubastaDbContext>(
@@ -27,9 +26,7 @@ builder.Services.AddDbContextFactory<SubastaDbContext>(
 
 
 
-//-------------------------------------------------------------------------------------------------
 
-// Registrar DbContext y Repositorios
 builder.Services.AddScoped<ISubastaRepository, SubastaRepository>();
 builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
@@ -37,7 +34,6 @@ builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerRepository>();
 builder.Services.AddScoped<IAuditoria_LogRepository, Auditoria_LogRepository>();
 
-// Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
@@ -62,11 +58,9 @@ builder.Services.AddScoped<ObtenerCategoriasQueryHandler>();
 
 builder.Services.AddScoped<RegistrarUsuarioCommandHandler>();
 
-// Registro del Background Worker para cierre automático
 builder.Services.AddHostedService<Infrastructure.Workers.SubastaWorker>();
 builder.Services.AddHostedService<Infrastructure.Workers.SubastaProgramadaWorker>();
 
-// 4. Autenticación JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -89,7 +83,6 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// 5. Configuración de Swagger para probar los Tokens
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SubastaYa API", Version = "v1" });
@@ -119,16 +112,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-//-------------------------------------------------------------------------------------------------
 
-// Add services to the container.
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
     });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
@@ -150,11 +140,9 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        //context.Database.EnsureDeleted();
-        //context.Database.EnsureCreated();
         //context.Database.Migrate();
-        //context.Database.EnsureDeleted();   
-        //context.Database.EnsureCreated();
+        context.Database.EnsureDeleted();   
+        context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {
@@ -163,15 +151,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-//la comento para que no intente forzar https
-//app.UseHttpsRedirection();
+
 
 app.UseCors("PermitirFrontend");
 

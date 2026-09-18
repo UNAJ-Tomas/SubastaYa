@@ -10,7 +10,6 @@ namespace Application.Interfaces
         Task<IEnumerable<Subasta>> GetAllActivasAsync();
         Task UpdateAsync(Subasta subasta);
 
-        // Inicia una transacción de base de datos de forma sencilla
         Task<ITransaccion> IniciarTransaccionAsync(CancellationToken cancellationToken = default);
     }
 }

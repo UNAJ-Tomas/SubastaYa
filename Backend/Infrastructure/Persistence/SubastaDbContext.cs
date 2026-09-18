@@ -7,7 +7,6 @@ namespace Infrastructure.Persistence
     {
         public SubastaDbContext(DbContextOptions<SubastaDbContext> options):base(options){ }
 
-        //tablas
 
         public DbSet<Auditoria_Log> Auditoria_log => Set<Auditoria_Log>();
         public DbSet<Billetera> Billetera => Set<Billetera>();
@@ -20,23 +19,19 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            // 1. Relación 1:1 Usuario - Billetera (EF necesita saber qué tabla lleva la FK)
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Billetera)
                 .WithOne(b => b.Usuario)
                 .HasForeignKey<Billetera>(b => b.usuario_id);
 
-            // 2. Concurrencia optimista (Optimistic Locking) en Billetera
             modelBuilder.Entity<Billetera>()
                 .Property(b => b.version)
                 .IsRowVersion();
 
-            // 3. Concurrencia optimista (Optimistic Locking) en Subasta
             modelBuilder.Entity<Subasta>()
                 .Property(s => s.version)
                 .IsRowVersion();
 
-            // 4. Precisión decimal para dinero en Billetera
             modelBuilder.Entity<Billetera>(b =>
             {
                 b.Property(p => p.saldo_total).HasPrecision(18, 2);
@@ -44,7 +39,6 @@ namespace Infrastructure.Persistence
                 b.Property(p => p.saldo_disponible).HasPrecision(18, 2);
             });
 
-            // 5. Precisión decimal para dinero en Subasta
             modelBuilder.Entity<Subasta>(s =>
             {
                 s.Property(p => p.precio_base).HasPrecision(18, 2);
@@ -55,19 +49,16 @@ namespace Infrastructure.Persistence
             {
                 t.Property(p => p.monto).HasPrecision(18, 2);
 
-                // Forzar el nombre exacto de la clave foránea a billetera_id
                 t.HasOne(x => x.Billetera)
                  .WithMany()
                  .HasForeignKey(x => x.billetera_id);
 
-                // Indicar que la relación con Subasta es opcional
                 t.HasOne(x => x.Subasta)
                  .WithMany()
                  .HasForeignKey(x => x.subasta_id)
                  .IsRequired(false);
             });
 
-            // Conversión de Enums a String
             modelBuilder.Entity<Subasta>().Property(s => s.estado).HasConversion<string>();
             modelBuilder.Entity<Transaccion_Ledger>().Property(t => t.tipo).HasConversion<string>();
 

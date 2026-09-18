@@ -32,18 +32,14 @@ namespace Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            // Buscamos directamente al usuario por su email usando el método de tu interfaz
             var usuario = await _usuarioRepository.GetByEmailAsync(loginDto.Email);
 
-            // Verificamos si el usuario existe y si la contraseña coincide
             if (usuario == null || usuario.password_hash != loginDto.Password)
             {
                 return Unauthorized("Credenciales inválidas.");
             }
 
-            // Si todo está bien, devolvemos los datos necesarios para el frontend
             return Ok(new { id = usuario.id, email = usuario.email, nombre = usuario.nombre });
         }
-
     }
 }

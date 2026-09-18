@@ -10,6 +10,5 @@ public class Auditoria_Log
         public DateTime fecha { get; set; }
 
 
-        // --- PROPIEDADES DE NAVEGACIÓN ---
         public Usuario? Usuario { get; set; }
 }

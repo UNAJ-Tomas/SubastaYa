@@ -4,7 +4,6 @@
     {
         public int id { get; set; }
         
-        //FK
         public int billetera_id { get; set; }
         public int? subasta_id { get; set; }
 
@@ -12,7 +11,6 @@
         public decimal monto { get; set; }
         public DateTime fecha { get; set; }
 
-        // --- PROPIEDADES DE NAVEGACIÓN ---
         public Subasta? Subasta { get; set; }
         public Billetera Billetera { get; set; }
     }

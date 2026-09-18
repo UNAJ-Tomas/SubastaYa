@@ -9,7 +9,6 @@
         public string rol { get; set; } = string.Empty;
         public DateTime fecha_registro { get; set; }
 
-    // --- PROPIEDADES DE NAVEGACIÓN ---
     public Billetera? Billetera { get; set; }
         public ICollection<Subasta> Subastas { get; set; } = new List<Subasta>();
         public ICollection<Puja> Pujas { get; set; } = new List<Puja>();

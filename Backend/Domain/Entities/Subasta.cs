@@ -6,7 +6,6 @@ public class Subasta
 {
     public int id { get; set; }
 
-    //FK
     public int vendedor_id { get; set; }
     public int categoria_id { get; set; }
     
@@ -23,7 +22,6 @@ public class Subasta
 
 
 
-    // --- PROPIEDADES DE NAVEGACIÓN ---
     public Usuario? Vendedor { get; set; }
     public Categoria? Categoria { get; set; }
     public ICollection<Puja> Pujas { get; set; } = new List<Puja>();
