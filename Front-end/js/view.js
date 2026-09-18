@@ -123,6 +123,10 @@ export function initDepositoView(saldoInicial = 0) {
     let saldoBase = saldoInicial; 
 
     function actualizarResumen() {
+        if (inputMonto == null) {
+            return;
+        }
+
         let montoIngresado = parseFloat(inputMonto.value) || 0;
         lblSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
         resumenSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
@@ -130,7 +134,9 @@ export function initDepositoView(saldoInicial = 0) {
         resumenTotalFinal.textContent = `$${(saldoBase + montoIngresado).toLocaleString()}`;
     }
 
-    inputMonto.addEventListener('input', actualizarResumen);
+    if (inputMonto != null) {
+        inputMonto.addEventListener('input', actualizarResumen);
+    }
 
     botonesMonto.forEach(btn => {
         btn.addEventListener('click', () => {

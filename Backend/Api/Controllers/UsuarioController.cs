@@ -2,6 +2,7 @@
 using Application.Interfaces.Repositories;
 using Application.UseCases.Usuario.Commands;
 using Application.UseCases.Usuario.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -36,6 +37,7 @@ namespace Api.Controllers
             return Ok(usuarioDto);
         }
 
+        //[Authorize]
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {

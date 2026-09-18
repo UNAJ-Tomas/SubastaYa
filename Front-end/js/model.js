@@ -15,7 +15,7 @@ function getAuthHeaders() {
 export const SubastaModel = {
     async obtenerSubastasActivas() {
         try {
-            const response = await fetch(`${API_URL}/subastas`, {
+            const response = await fetch(`${API_URL}/Subastas`, {
                 headers: getAuthHeaders()
             });
             if (!response.ok) throw new Error('Error al obtener subastas');
