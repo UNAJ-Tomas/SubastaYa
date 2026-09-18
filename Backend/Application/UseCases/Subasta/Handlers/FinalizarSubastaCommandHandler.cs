@@ -52,7 +52,7 @@ namespace Application.UseCases.Subasta.Handlers
                         subasta_id = subastaId,
                         tipo = "PAGO_SUBASTA",
                         monto = pujaGanadora.monto,
-                        fecha = DateTime.Now
+                        fecha = DateTime.UtcNow
                     });
                 }
 
@@ -69,7 +69,7 @@ namespace Application.UseCases.Subasta.Handlers
                         subasta_id = subastaId,
                         tipo = "COBRO_SUBASTA",
                         monto = pujaGanadora.monto,
-                        fecha = DateTime.Now
+                        fecha = DateTime.UtcNow
                     });
                 }
 

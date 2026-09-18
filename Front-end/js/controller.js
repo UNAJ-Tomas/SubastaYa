@@ -466,7 +466,9 @@ function inicializarVistaCrearSubasta() {
 
             fechaInicio: new Date().toISOString(),
 
-            fechaFin: document.getElementById('fechaFin').value
+            //fechaFin: document.getElementById(('fechaFin').value).toISOString()
+            fechaFin: new Date(document.getElementById('fechaFin').value).toISOString()
+
 
         };
 
