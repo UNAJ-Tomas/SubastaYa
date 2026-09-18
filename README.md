@@ -29,6 +29,7 @@ Se debe modificar el ConnectionString a uno local. Por ejemplo:
 🔄 Migración
 
 Con la ejecucion del programa ya se realiza la migracion automaticamente con el comando context.Database.Migrate() o puede optar por escribirla en la consola del Administrador de paquetes con el comando add-migration init (El programa ya posee el paquete necesario para aceptar el comando).
+
 ▶️ Ejecución
 
 Para la ejecucion del programa se debe tener en cuenta que el perfil de lanzamiento de Visual Studio sea "https" para que el front end se vea correctamente.
