@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (document.getElementById('inputMonto')) {
 
-        await inicializarVistaDepositar();
+        await inicializarVistaDepositar(USUARIO_ACTUAL_ID);
 
         return;
 
@@ -270,8 +270,8 @@ import { initDepositoView } from './view.js';
 //import { obtenerSaldoUsuario } from './model.js'; 
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const saldoInicial = 0; 
-    initDepositoView(saldoInicial);
+    const saldoInicial = await SubastaModel.obtenerBilleteraUsuario(USUARIO_ACTUAL_ID);
+    initDepositoView(saldoInicial.saldoDisponible);
 });
 
 

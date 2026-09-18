@@ -112,7 +112,7 @@ export const SubastaView = {
 };
 
 
-export function initDepositoView(saldoInicial = 0) {
+export function initDepositoView(saldoInicial) {
     const inputMonto = document.getElementById('inputMonto');
     const lblSaldoActual = document.getElementById('lblSaldoActual');
     const resumenSaldoActual = document.getElementById('resumenSaldoActual');
@@ -126,7 +126,7 @@ export function initDepositoView(saldoInicial = 0) {
         if (inputMonto == null) {
             return;
         }
-
+        let valorTexto = inputMonto.value.replace(/\./g, '').replace(',', '.');
         let montoIngresado = parseFloat(inputMonto.value) || 0;
         lblSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
         resumenSaldoActual.textContent = `$${saldoBase.toLocaleString()}`;
