@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Carpeta source agregada manualmente para que Git la ignore
+source/
