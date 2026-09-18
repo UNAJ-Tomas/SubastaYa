@@ -153,8 +153,8 @@ using (var scope = app.Services.CreateScope())
         //context.Database.EnsureDeleted();
         //context.Database.EnsureCreated();
         //context.Database.Migrate();
-        context.Database.EnsureDeleted();   
-        context.Database.EnsureCreated();
+        //context.Database.EnsureDeleted();   
+        //context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {

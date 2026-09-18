@@ -4,8 +4,9 @@ import { SubastaView } from './view.js';
 
 
 
-const USUARIO_ACTUAL_ID = 1; // Simulamos el usuario logueado
+//const USUARIO_ACTUAL_ID = 1; // Simulamos el usuario logueado
 
+const USUARIO_ACTUAL_ID = sessionStorage.getItem('usuarioId') || 1;
 let subastasActuales = []; // Variable genérica para almacenar las subastas de la vista actual
 
 
@@ -272,13 +273,13 @@ async function manejarIntentoPuja(subastaId, montoMinimoRequerido) {
 // ==========================================
 
 
-import { initDepositoView } from './view.js';
+/* import { initDepositoView } from './view.js';
 //import { obtenerSaldoUsuario } from './model.js'; 
 
 document.addEventListener('DOMContentLoaded', async () => {
     const saldoInicial = await SubastaModel.obtenerBilleteraUsuario(USUARIO_ACTUAL_ID);
     initDepositoView(saldoInicial.saldoDisponible);
-});
+}); */
 
 
 async function inicializarVistaDepositar() {
