@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence
         }
 
         public Task CommitAsync(CancellationToken cancellationToken = default)
-            => _transaction.CommitAsync(cancellationToken);
+           => _transaction.CommitAsync(cancellationToken);
 
         public Task RollbackAsync(CancellationToken cancellationToken = default)
             => _transaction.RollbackAsync(cancellationToken);

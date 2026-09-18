@@ -1,11 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Usuario.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UseCases.Usuario.Handlers
 {
@@ -37,7 +32,8 @@ namespace Application.UseCases.Usuario.Handlers
             {
                 nombre = command.Nombre,
                 email = command.Email,
-                password_hash = command.Password.Trim() // ( acá aplico hashing si corresponde)
+                password_hash = command.Password, // ( acá aplico hashing si corresponde)
+                fecha_registro = DateTime.UtcNow
             };
 
             var usuarioId = await _usuarioRepository.AddAsync(usuario);

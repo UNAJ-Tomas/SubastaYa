@@ -1,23 +1,31 @@
 using System.Text;
+using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.UseCases.Auditoria_log.Handlers;
 using Application.UseCases.Billetera.Handlers;
 using Application.UseCases.Categoria.Handlers;
+using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Handlers;
 using Application.UseCases.Usuario.Handlers;
-using Application.UseCases.Puja.Handlers;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // REGISTRAR EL DBCONTEXT
 builder.Services.AddDbContext<SubastaDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContextFactory<SubastaDbContext>(
+    options =>
+        options.UseSqlServer(
+            builder.Configuration.GetConnectionString("DefaultConnection")),
+    ServiceLifetime.Scoped);
+
+
 
 //-------------------------------------------------------------------------------------------------
 
@@ -27,17 +35,20 @@ builder.Services.AddScoped<IBilleteraRepository, BilleteraRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<ITransaccionLedgerRepository, TransaccionLedgerRepository>();
+builder.Services.AddScoped<IAuditoria_LogRepository, Auditoria_LogRepository>();
 
 // Registrar Handlers (Commands y Queries)
 builder.Services.AddScoped<CrearSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastaPorIdQueryHandler>();
-builder.Services.AddTransient<ObtenerSubastasActivasPorCompradorQueryHandler>();
+builder.Services.AddScoped<ObtenerSubastasActivasQueryHandler>();
 builder.Services.AddScoped<ActualizarSubastaCommandHandler>();
 builder.Services.AddScoped<CancelarSubastaCommandHandler>();
 builder.Services.AddScoped<FinalizarSubastaCommandHandler>();
 builder.Services.AddScoped<ObtenerSubastasConFiltroQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorVendedorQueryHandler>();
 builder.Services.AddScoped<ObtenerSubastasPorCompradorQueryHandler>();
+builder.Services.AddScoped<CrearAuditoria_LogCommandHandler>();
+builder.Services.AddScoped<IniciarSubastasProgramadasCommandHandler>();
 
 builder.Services.AddScoped<RegistrarPujaCommandHandler>();
 
@@ -53,6 +64,7 @@ builder.Services.AddScoped<RegistrarUsuarioCommandHandler>();
 
 // Registro del Background Worker para cierre automático
 builder.Services.AddHostedService<Infrastructure.Workers.SubastaWorker>();
+builder.Services.AddHostedService<Infrastructure.Workers.SubastaProgramadaWorker>();
 
 // 4. Autenticación JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -77,7 +89,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//  Configuración de Swagger para probar los Tokens
+// 5. Configuración de Swagger para probar los Tokens
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "SubastaYa API", Version = "v1" });
@@ -141,8 +153,8 @@ using (var scope = app.Services.CreateScope())
         //context.Database.EnsureDeleted();
         //context.Database.EnsureCreated();
         //context.Database.Migrate();
-        //context.Database.EnsureDeleted();   
-        //context.Database.EnsureCreated();
+        context.Database.EnsureDeleted();   
+        context.Database.EnsureCreated();
     }
     catch (Exception ex)
     {

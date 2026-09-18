@@ -1,6 +1,8 @@
 ﻿using Application.Exceptions;
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
+using Application.UseCases.Auditoria_log.Commands;
+using Application.UseCases.Auditoria_log.Handlers;
 using Application.UseCases.Subasta.Commands;
 using Domain.Entities;
 using Domain.Enums;
@@ -12,15 +14,18 @@ namespace Application.UseCases.Puja.Handlers
         private readonly ISubastaRepository _subastaRepository;
         private readonly IBilleteraRepository _billeteraRepository;
         private readonly ITransaccionLedgerRepository _ledgerRepository;
+        private readonly CrearAuditoria_LogCommandHandler _crearauditoriaCommandHandler;
 
         public RegistrarPujaCommandHandler(
             ISubastaRepository subastaRepository,
             IBilleteraRepository billeteraRepository,
-            ITransaccionLedgerRepository ledgerRepository)
+            ITransaccionLedgerRepository ledgerRepository,
+            CrearAuditoria_LogCommandHandler crearauditoriaCommandHandler)
         {
             _subastaRepository = subastaRepository;
             _billeteraRepository = billeteraRepository;
             _ledgerRepository = ledgerRepository;
+            _crearauditoriaCommandHandler = crearauditoriaCommandHandler;
         }
 
         public async Task<bool> Handle(RegistrarPujaCommand command, CancellationToken cancellationToken = default)
@@ -35,7 +40,7 @@ namespace Application.UseCases.Puja.Handlers
                 if (subasta == null)
                     throw new NotFoundException("La subasta no existe.");
 
-                if (subasta.estado != EstadoSubasta.ACTIVA || DateTime.Now > subasta.fecha_fin)
+                if (subasta.estado != EstadoSubasta.ACTIVA || DateTime.UtcNow > subasta.fecha_fin)
                     throw new ValidationException("La subasta no se encuentra activa para recibir ofertas.");
 
                 // 1. Validar monto mínimo
@@ -71,7 +76,7 @@ namespace Application.UseCases.Puja.Handlers
                             subasta_id = subasta.id,
                             tipo = "DEVOLUCION_PUJA",
                             monto = pujaAnterior.monto,
-                            fecha = DateTime.Now
+                            fecha = DateTime.UtcNow
                         });
                     }
                 }
@@ -87,7 +92,7 @@ namespace Application.UseCases.Puja.Handlers
                     subasta_id = subasta.id,
                     tipo = "RETENCION_PUJA",
                     monto = command.Monto,
-                    fecha = DateTime.Now
+                    fecha = DateTime.UtcNow
                 });
 
                 // 5. Registrar la nueva puja
@@ -96,16 +101,25 @@ namespace Application.UseCases.Puja.Handlers
                     subasta_id = command.SubastaId,
                     comprador_id = command.CompradorId,
                     monto = command.Monto,
-                    fecha_puja = DateTime.Now
+                    fecha_puja = DateTime.UtcNow
                 };
 
                 subasta.Pujas ??= new List<Domain.Entities.Puja>();
                 subasta.Pujas.Add(nuevaPuja);
 
                 // 6. Anti-Sniping (Últimos 60s -> Extiende 2 min)
-                var tiempoRestante = subasta.fecha_fin - DateTime.Now;
+                var tiempoRestante = subasta.fecha_fin - DateTime.UtcNow;
                 if (tiempoRestante <= TimeSpan.FromSeconds(60))
                 {
+                    CrearAuditoria_LogCommand command_auditoria = new CrearAuditoria_LogCommand
+                    {
+                        Entidad = "Puja",
+                        Entidad_id = command.SubastaId,
+                        Accion = "EXTENSION_TIEMPO",
+                        Usuario_id = command.CompradorId,
+                    };
+                    await _crearauditoriaCommandHandler.HandleAsync(command_auditoria, tiempoRestante.ToString());
+
                     subasta.fecha_fin = subasta.fecha_fin.AddMinutes(2);
                 }
 
@@ -114,6 +128,64 @@ namespace Application.UseCases.Puja.Handlers
                 // Confirma la transacción en la base de datos
                 await transaction.CommitAsync(cancellationToken);
                 return true;
+            }
+            catch (ValidationException ex)
+            {
+                // En caso de error de validación, revierte los cambios
+                await transaction.RollbackAsync(cancellationToken);
+                CrearAuditoria_LogCommand command_auditoria = new CrearAuditoria_LogCommand
+                {
+                    Entidad = "Puja",
+                    Entidad_id = command.SubastaId,
+                    Accion = "PUJA_RECHAZADA",
+                    Usuario_id = command.CompradorId,
+                };
+                await _crearauditoriaCommandHandler.HandleAsync(command_auditoria, ex.Message);
+                //throw new ValidationException(ex.Message);
+                throw;
+            }
+            catch (NotFoundException ex)
+            {
+                // En caso de error de validación, revierte los cambios
+                await transaction.RollbackAsync(cancellationToken);
+                CrearAuditoria_LogCommand command_auditoria = new CrearAuditoria_LogCommand
+                {
+                    Entidad = "Puja",
+                    Entidad_id = command.SubastaId,
+                    Accion = "PUJA_RECHAZADA",
+                    Usuario_id = command.CompradorId,
+                };
+                await _crearauditoriaCommandHandler.HandleAsync(command_auditoria, ex.Message);
+                //throw new ValidationException(ex.Message);
+                throw;
+            }
+            catch (ConflictException ex)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+
+                CrearAuditoria_LogCommand command_auditoria = new CrearAuditoria_LogCommand
+                {
+                    Entidad = "Puja",
+                    Entidad_id = command.SubastaId,
+                    Accion = "PUJA_INVALIDA",
+                    Usuario_id = command.CompradorId,
+                };
+                await _crearauditoriaCommandHandler.HandleAsync(command_auditoria, ex.Message);
+
+                throw;
+            }
+            catch (FormatException)
+            {
+                await transaction.RollbackAsync(cancellationToken);
+                CrearAuditoria_LogCommand command_auditoria = new CrearAuditoria_LogCommand
+                {
+                    Entidad = "Puja",
+                    Entidad_id = command.SubastaId,
+                    Accion = "PUJA_RECHAZADA",
+                    Usuario_id = command.CompradorId,
+                };
+                await _crearauditoriaCommandHandler.HandleAsync(command_auditoria, "Oferta invalida. No se aceptan letras como oferta.");
+                throw;
             }
             catch
             {
