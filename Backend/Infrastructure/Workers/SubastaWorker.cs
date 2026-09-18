@@ -31,9 +31,8 @@ namespace Infrastructure.Workers
                         var context = scope.ServiceProvider.GetRequiredService<SubastaDbContext>();
                         var finalizarHandler = scope.ServiceProvider.GetRequiredService<FinalizarSubastaCommandHandler>();
 
-                        // Busca subastas activas cuya fecha_fin ya haya pasado
                         var subastasVencidas = await context.Subasta
-                            .Where(s => s.estado == Domain.Enums.EstadoSubasta.ACTIVA && s.fecha_fin <= DateTime.Now)
+                            .Where(s => s.estado == Domain.Enums.EstadoSubasta.ACTIVA && s.fecha_fin <= DateTime.UtcNow)
                             .Select(s => s.id)
                             .ToListAsync(stoppingToken);
 
@@ -49,7 +48,6 @@ namespace Infrastructure.Workers
                     _logger.LogError(ex, "Error procesando el cierre automático de subastas.");
                 }
 
-                // Verifica cada 15 segundos
                 await Task.Delay(TimeSpan.FromSeconds(15), stoppingToken);
             }
         }

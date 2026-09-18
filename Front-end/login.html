@@ -87,7 +87,8 @@
             const data = await response.json();
 
             sessionStorage.setItem('tokenJWT', data.token);
-            sessionStorage.setItem('usuarioActualId', data.id);
+            sessionStorage.setItem('usuarioNombre', data.nombre);
+            sessionStorage.setItem('usuarioId', data.id);
             sessionStorage.setItem('usuarioLogueado', data.email);
 
             // Redirigimos al home solo si la autenticación fue exitosa

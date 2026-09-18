@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using Application.Exceptions;
+using Application.Interfaces;
 using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +17,16 @@ namespace Infrastructure.Repositories
 
         public async Task<int> AddAsyc(Transaccion_Ledger transaccion)
         {
-            await _context.Set<Transaccion_Ledger>().AddAsync(transaccion);
-            await _context.SaveChangesAsync();
-            return transaccion.id;
+            try
+            {
+                await _context.Set<Transaccion_Ledger>().AddAsync(transaccion);
+                await _context.SaveChangesAsync();
+                return transaccion.id;
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                throw new ConflictException("La operación fue modificada por otro usuario.");
+            }
         }
 
         public async Task<IEnumerable<Transaccion_Ledger>> GetByBilleteraIdAsync(int billeteraId)

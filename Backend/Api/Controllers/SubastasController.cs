@@ -4,27 +4,22 @@ using Application.UseCases.Puja.Handlers;
 using Application.UseCases.Subasta.Commands;
 using Application.UseCases.Subasta.Handlers;
 using Application.UseCases.Subasta.Queries;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class SubastasController : ControllerBase
 {
 
-    //atributos
     private readonly CrearSubastaCommandHandler _crearSubastaHandler;
     private readonly ActualizarSubastaCommandHandler _actualizarSubastaHandler;
     private readonly CancelarSubastaCommandHandler _cancelarSubastaHandler;
     private readonly ObtenerSubastaPorIdQueryHandler _obtenerSubastaPorIdHandler;
-
     private readonly ObtenerSubastasPorCompradorQueryHandler _obtenerSubastaPorCompradorQueryHandler;
-    private readonly ObtenerSubastasActivasPorCompradorQueryHandler _obtenerSubastasActivasHandler;
+    private readonly ObtenerSubastasActivasQueryHandler _obtenerSubastasActivasHandler;
     private readonly RegistrarPujaCommandHandler _registrarPujaCommandHandler;
 
-    //constructor
     public SubastasController(
     RegistrarPujaCommandHandler registrarPujaCommandHandler, 
     ObtenerSubastasPorCompradorQueryHandler obtenerSubastaPorCompradorQueryHandler,
@@ -32,7 +27,7 @@ public class SubastasController : ControllerBase
         ActualizarSubastaCommandHandler actualizarSubastaHandler,
         CancelarSubastaCommandHandler cancelarSubastaHandler,
         ObtenerSubastaPorIdQueryHandler obtenerSubastaPorIdHandler,
-        ObtenerSubastasActivasPorCompradorQueryHandler obtenerSubastasActivasHandler)
+        ObtenerSubastasActivasQueryHandler obtenerSubastasActivasHandler)
     {
         _crearSubastaHandler = crearSubastaHandler;
         _actualizarSubastaHandler = actualizarSubastaHandler;
@@ -44,7 +39,6 @@ public class SubastasController : ControllerBase
     }
 
 
-    //metodos
 
     [HttpPost]
     public async Task<IActionResult> Crear(CrearSubastaCommand command)
@@ -79,6 +73,7 @@ public class SubastasController : ControllerBase
             return BadRequest("El ID de la ruta no coincide con el cuerpo de la solicitud.");
 
         var resultado = await _actualizarSubastaHandler.Handle(command);
+        
         return Ok(new { mensaje = "Subasta actualizada correctamente", exito = resultado });
     }
 
@@ -97,14 +92,19 @@ public class SubastasController : ControllerBase
             return BadRequest(new { mensaje = "El ID de la ruta no coincide con el ID de la subasta del cuerpo de la solicitud." });
 
         var resultado = await _registrarPujaCommandHandler.Handle(command);
-        return Ok(new { mensaje = "Puja registrada exitosamente", exito = resultado });
+
+        return StatusCode(StatusCodes.Status201Created, new
+        {
+            mensaje = "Puja registrada exitosamente",
+            exito = resultado
+        });
     }
 
     [HttpGet("usuario/{usuarioId}/participadas")]
-    public async Task<IActionResult> GetSubastas(int usuarioId)
+    public async Task<IActionResult> GetSubastasPSarticipadas(int usuarioId)
     {
         var query = new ObtenerSubastasPorCompradorQuery(usuarioId);
-        var subastas = await _obtenerSubastaPorCompradorQueryHandler.HandleAsync(query);
+        var subastas = await _obtenerSubastaPorCompradorQueryHandler.Handle(query);
         return Ok(subastas);
     }
 }

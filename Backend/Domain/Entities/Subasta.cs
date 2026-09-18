@@ -1,11 +1,4 @@
-﻿using Domain.Entities;
-using Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Enums;
 
 namespace Domain.Entities;
 
@@ -13,10 +6,7 @@ public class Subasta
 {
     public int id { get; set; }
 
-    //FK
     public int vendedor_id { get; set; }
-
-    [Column("categoria_id")]
     public int categoria_id { get; set; }
     
     
@@ -32,10 +22,7 @@ public class Subasta
 
 
 
-    // --- PROPIEDADES DE NAVEGACIÓN ---
     public Usuario? Vendedor { get; set; }
-
-    [ForeignKey("categoria_id")]
     public Categoria? Categoria { get; set; }
     public ICollection<Puja> Pujas { get; set; } = new List<Puja>();
 }

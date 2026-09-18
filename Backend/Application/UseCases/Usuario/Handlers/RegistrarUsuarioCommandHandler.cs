@@ -1,11 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interfaces.Repositories;
 using Application.UseCases.Usuario.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.UseCases.Usuario.Handlers
 {
@@ -22,7 +17,6 @@ namespace Application.UseCases.Usuario.Handlers
             _billeteraRepository = billeteraRepository;
         }
 
-        //registramos al usuario
         public async Task<UsuarioDto> HandleAsync(RegistrarUsuarioCommand command, CancellationToken cancellation)
         {
             if (string.IsNullOrWhiteSpace(command.Email) || string.IsNullOrWhiteSpace(command.Password))
@@ -32,17 +26,16 @@ namespace Application.UseCases.Usuario.Handlers
             if(existe!=null)
                 throw new Exception("El email ya se encuentra registrado.");
 
-            // 1. Crear Usuario
             var usuario = new Domain.Entities.Usuario
             {
                 nombre = command.Nombre,
                 email = command.Email,
-                password_hash = command.Password.Trim() // ( acá aplico hashing si corresponde)
+                password_hash = command.Password,
+                fecha_registro = DateTime.UtcNow
             };
 
             var usuarioId = await _usuarioRepository.AddAsync(usuario);
 
-            // 2. Crear automáticamente su Billetera asociada con saldo 0
             var billetera = new Domain.Entities.Billetera
             {
                 usuario_id = usuarioId,

@@ -41,7 +41,16 @@ public class BilleterasController : ControllerBase
             return BadRequest(new { mensaje = "El monto a cargar debe ser mayor a cero." });
 
         var resultado = await _cargarSaldoHandler.HandleAsync(command);
+
+        
+        return StatusCode(StatusCodes.Status201Created, new
+        {
+            mensaje = "Saldo cargado exitosamente",
+            exito = resultado
+        });
+        /*
         return Ok(new { mensaje = "Saldo cargado exitosamente", exito = resultado });
+        */
     }
 
     [HttpGet("usuario/{usuarioId}/movimientos")]

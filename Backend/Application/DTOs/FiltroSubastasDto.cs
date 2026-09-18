@@ -8,6 +8,6 @@ namespace Application.DTOs
         public int? CategoriaId { get; set; }
         public decimal? PrecioMin { get; set; }
         public decimal? PrecioMax { get; set; }
-        public string? Orden { get; set; } // "tiempo_asc", "precio_asc", "precio_desc"
+        public string? Orden { get; set; }
     }
 }

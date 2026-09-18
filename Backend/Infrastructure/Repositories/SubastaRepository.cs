@@ -1,4 +1,5 @@
 ﻿namespace Infrastructure.Repositories;
+using Application.Exceptions;
 
 using Application.Interfaces;
 using Application.Interfaces.Repositories;
@@ -29,29 +30,38 @@ public class SubastaRepository : ISubastaRepository
             .FirstOrDefaultAsync(s => s.id == id);
     }
 
-    public async Task<IEnumerable<Subasta>> GetAllActivasAsync()
+    public async Task<List<Subasta>> GetProgramadasIniciablesAsync(CancellationToken cancellationToken)
     {
-        var fechaActual = DateTime.Now;
-
+        DateTime fechaActual = DateTime.UtcNow;
         return await _context.Subasta
-            .Include(s => s.Pujas)
-            .Include(s => s.Categoria) 
-            .Where(s => s.estado == EstadoSubasta.ACTIVA && s.fecha_fin > fechaActual)
-            .ToListAsync();
+        .Where(s =>
+            s.estado == EstadoSubasta.PROGRAMADA &&
+            s.fecha_inicio <= fechaActual &&
+            s.fecha_fin >= fechaActual)
+        .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Subasta>> GetAllWithPujasAsync()
+    public async Task<IEnumerable<Subasta>> GetAllActivasAsync()
     {
+        var fechaActual = DateTime.UtcNow;
+
         return await _context.Subasta
-            .Include(s => s.Pujas)
-            .Include(s => s.Categoria) 
+            .Include(s => s.Pujas) 
+            .Where(s => s.estado == EstadoSubasta.ACTIVA && s.fecha_fin > fechaActual)
             .ToListAsync();
     }
 
     public async Task UpdateAsync(Subasta subasta)
     {
-        _context.Subasta.Update(subasta);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Subasta.Update(subasta);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new ConflictException("La subasta fue modificada por otro usuario.");
+        }
     }
 
     public async Task<ITransaccion> IniciarTransaccionAsync(CancellationToken cancellationToken = default)

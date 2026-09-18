@@ -1,11 +1,4 @@
-﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Entities;
+﻿namespace Domain.Entities;
 
     public class Usuario
     {
@@ -14,9 +7,9 @@ namespace Domain.Entities;
         public string email { get; set; } = string.Empty;
         public string password_hash { get; set; } = string.Empty;
         public string rol { get; set; } = string.Empty;
+        public DateTime fecha_registro { get; set; }
 
-        // --- PROPIEDADES DE NAVEGACIÓN ---
-        public Billetera? Billetera { get; set; }
+    public Billetera? Billetera { get; set; }
         public ICollection<Subasta> Subastas { get; set; } = new List<Subasta>();
         public ICollection<Puja> Pujas { get; set; } = new List<Puja>();
     }
