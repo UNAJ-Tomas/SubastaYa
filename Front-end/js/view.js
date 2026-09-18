@@ -112,7 +112,7 @@ export const SubastaView = {
 };
 
 
-export function DepositoView(saldoInicial = 0) {
+export function initDepositoView(saldoInicial = 0) {
     const inputMonto = document.getElementById('inputMonto');
     const lblSaldoActual = document.getElementById('lblSaldoActual');
     const resumenSaldoActual = document.getElementById('resumenSaldoActual');
