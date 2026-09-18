@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-    //vista: TRANSACCIONES.HTML (Historial)
+ /*    //vista: TRANSACCIONES.HTML (Historial)
 
     if (document.getElementById('contenedorHistorial') && window.location.pathname.includes('transacciones.html')) {
 
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         return;
 
-    }
+    } */
 
 
 
@@ -437,59 +437,56 @@ async function inicializarVistaMisSubastas() {
 
 
 function inicializarVistaCrearSubasta() {
-
     const form = document.getElementById('formCrearSubasta');
 
-
-
     form.addEventListener('submit', async (e) => {
-
         e.preventDefault();
 
+        const inputArchivo = document.getElementById('imagenFile');
+        const archivo = inputArchivo.files[0];
 
-
-        const nuevaSubasta = {
-
-            vendedorId: USUARIO_ACTUAL_ID,
-
-            categoriaId: parseInt(document.getElementById('categoriaId').value),
-
-            titulo: document.getElementById('titulo').value,
-
-            descripcion: document.getElementById('descripcion').value,
-
-            urlImagen: document.getElementById('urlImagen').value,
-
-            precioBase: parseFloat(document.getElementById('precioInicial').value),
-
-            incrementoMinimo: 100,
-
-            fechaInicio: new Date().toISOString(),
-
-            //fechaFin: document.getElementById(('fechaFin').value).toISOString()
-            fechaFin: new Date(document.getElementById('fechaFin').value).toISOString()
-
-
-        };
-
-
-
-        const resultado = await SubastaModel.crearSubasta(nuevaSubasta);
-
-
-
-        if (resultado.exito) {
-
-            alert('¡Subasta creada con éxito!');
-
-            window.location.href = 'home.html';
-
-        } else {
-
-            alert(`Error al crear la subasta: ${resultado.mensaje}`);
-
+        if (!archivo) {
+            alert('Por favor, selecciona una imagen para la subasta.');
+            return;
         }
 
-    });
+        // Función para convertir el archivo a Base64
+        const convertirABase64 = (file) => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        };
 
+        try {
+            // Convertimos la imagen elegida a Base64
+            const imagenBase64 = await convertirABase64(archivo);
+
+            const nuevaSubasta = {
+                vendedorId: USUARIO_ACTUAL_ID,
+                categoriaId: parseInt(document.getElementById('categoriaId').value),
+                titulo: document.getElementById('titulo').value,
+                descripcion: document.getElementById('descripcion').value,
+                urlImagen: imagenBase64, 
+                precioBase: parseFloat(document.getElementById('precioInicial').value),
+                incrementoMinimo: 100,
+                fechaInicio: new Date().toISOString(),
+                fechaFin: new Date(document.getElementById('fechaFin').value).toISOString()
+            };
+
+            const resultado = await SubastaModel.crearSubasta(nuevaSubasta);
+
+            if (resultado.exito) {
+                alert('¡Subasta creada con éxito!');
+                window.location.href = 'home.html';
+            } else {
+                alert(`Error al crear la subasta: ${resultado.mensaje}`);
+            }
+        } catch (error) {
+            console.error('Error al procesar la imagen:', error);
+            alert('Hubo un error al procesar la imagen seleccionada.');
+        }
+    });
 }

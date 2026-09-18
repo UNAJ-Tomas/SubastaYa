@@ -58,7 +58,7 @@ export const SubastaView = {
             card.innerHTML = `
                 <div class="card card-subasta h-100 shadow-sm border-0 overflow-hidden">
                     <!-- Imagen de la subasta -->
-                    <img src="${imagenSrc}" class="card-img-top" alt="${subasta.titulo}" style="height: 180px; object-fit: cover;">
+                    <img src="${imagenSrc}" class="card-img-top" alt="${subasta.titulo}" style="height: 100%; object-fit: contain ;">
                     
                     <div class="card-body d-flex flex-column justify-content-between p-3">
                         <div>

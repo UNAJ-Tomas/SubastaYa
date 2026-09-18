@@ -69,4 +69,12 @@ public class SubastaRepository : ISubastaRepository
         var efTransaction = await _context.Database.BeginTransactionAsync(cancellationToken);
         return new EfTransaccion(efTransaction);
     }
+
+    public async Task<IEnumerable<Domain.Entities.Subasta>> GetAllAsync(int compradorId)
+    {
+        return await _context.Subasta
+            .Include(s => s.Pujas) // Importante incluir las pujas para que no lleguen nulas
+            .Where(s => s.Pujas.Any(p => p.comprador_id == compradorId))
+            .ToListAsync();
+    }
 }
